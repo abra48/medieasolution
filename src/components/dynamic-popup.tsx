@@ -24,14 +24,22 @@ export function DynamicPopUp() {
       try {
         const supabase = createClient();
         const { data } = await supabase
-          .from("popups")
-          .select("*")
+          .from("assets")
+          .select("id, title, description, content, link_url, is_active")
+          .eq("asset_type", "pop_up")
           .eq("is_active", true)
           .limit(1)
           .single();
 
         if (data) {
-          setPopup(data);
+          setPopup({
+            id: data.id,
+            title: data.title || "Announcement",
+            content: data.description || data.content || "",
+            button_text: data.title ? "Open" : null,
+            button_url: data.link_url || null,
+            is_active: data.is_active,
+          });
           setTimeout(() => setVisible(true), 500);
         }
       } catch {

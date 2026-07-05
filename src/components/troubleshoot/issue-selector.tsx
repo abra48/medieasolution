@@ -3,13 +3,12 @@
 import { useEffect, useState } from "react";
 import { useTroubleshoot } from "@/lib/troubleshoot-context";
 import { createClient } from "@/lib/supabase/client";
+import { getIssuesTable } from "@/lib/platform-tables";
 
 type Issue = {
   id: string;
-  platform_id: string;
   issue_name: string;
   description: string | null;
-  status: string;
 };
 
 export function IssueSelector() {
@@ -23,10 +22,10 @@ export function IssueSelector() {
     const fetchIssues = async () => {
       setLoading(true);
       const supabase = createClient();
+      const tableName = getIssuesTable(selectedPlatform.name);
       const { data } = await supabase
-        .from("issues")
-        .select("id, platform_id, issue_name, description, status")
-        .eq("platform_id", selectedPlatform.id)
+        .from(tableName)
+        .select("id, issue_name, description")
         .eq("status", "active")
         .order("issue_name");
 

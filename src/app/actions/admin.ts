@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { isAdminRole, isAdminSeniorOrAbove, isAdminLead } from "@/lib/admin-roles";
+import { getIssuesTable, getSolutionsTable, getPlatformSlug } from "@/lib/platform-tables";
 
 /* ——— Tiered admin verification ——— */
 async function getAdminProfile() {
@@ -71,32 +72,41 @@ export async function deletePlatform(id: string): Promise<ActionResult> {
 }
 
 /* ═══════════════════════════════
-   ISSUES
+   ISSUES (Platform-Isolated)
    ═══════════════════════════════ */
 export async function createIssue(_: ActionResult, formData: FormData): Promise<ActionResult> {
   try {
     const supabase = await verifyAdmin();
-    const platform_id = formData.get("platform_id") as string;
+    const platform_name = (formData.get("platform_name") as string)?.trim();
     const issue_name = (formData.get("issue_name") as string)?.trim();
     const description = (formData.get("description") as string)?.trim() || null;
 
-    if (!platform_id) return { error: "Platform wajib dipilih." };
+    if (!platform_name) return { error: "Platform wajib dipilih." };
     if (!issue_name) return { error: "Nama kendala wajib diisi." };
 
-    const { error } = await supabase.from("issues").insert({ platform_id, issue_name, description });
+    // Validate platform slug
+    try {
+      getPlatformSlug(platform_name);
+    } catch {
+      return { error: `Platform "${platform_name}" tidak dikenali sistem.` };
+    }
+
+    const tableName = getIssuesTable(platform_name);
+    const { error } = await supabase.from(tableName).insert({ issue_name, description });
     if (error) return { error: error.message };
 
     revalidatePath("/admin/issues");
-    return { success: true, message: `Kendala "${issue_name}" berhasil ditambahkan.` };
+    return { success: true, message: `Kendala "${issue_name}" berhasil ditambahkan ke ${platform_name}.` };
   } catch (e) {
     return { error: (e as Error).message };
   }
 }
 
-export async function deleteIssue(id: string): Promise<ActionResult> {
+export async function deleteIssue(platformName: string, id: string): Promise<ActionResult> {
   try {
     const supabase = await verifyAdmin();
-    const { error } = await supabase.from("issues").delete().eq("id", id);
+    const tableName = getIssuesTable(platformName);
+    const { error } = await supabase.from(tableName).delete().eq("id", id);
     if (error) return { error: error.message };
     revalidatePath("/admin/issues");
     return { success: true };
@@ -106,25 +116,40 @@ export async function deleteIssue(id: string): Promise<ActionResult> {
 }
 
 /* ═══════════════════════════════
-   SOLUTIONS
+   SOLUTIONS (Platform-Isolated)
    ═══════════════════════════════ */
 export async function createSolution(_: ActionResult, formData: FormData): Promise<ActionResult> {
   try {
     const supabase = await verifyAdmin();
+    const platform_name = (formData.get("platform_name") as string)?.trim();
     const issue_id = formData.get("issue_id") as string;
     const step_number = parseInt(formData.get("step_number") as string, 10);
     const content_type = formData.get("content_type") as string;
     const content_data = (formData.get("content_data") as string)?.trim();
-    const shortcut_url = (formData.get("shortcut_url") as string)?.trim() || null;
     const method_group = (formData.get("method_group") as string)?.trim() || "Cara 1";
+    const button_label = (formData.get("button_label") as string)?.trim() || null;
+    const button_link = (formData.get("button_link") as string)?.trim() || null;
 
+    if (!platform_name) return { error: "Platform wajib dipilih." };
     if (!issue_id) return { error: "Kendala wajib dipilih." };
     if (!step_number || step_number < 1) return { error: "Nomor langkah tidak valid." };
     if (!content_type) return { error: "Tipe konten wajib dipilih." };
     if (!content_data) return { error: "Konten wajib diisi." };
 
-    const { error } = await supabase.from("solutions").insert({
-      issue_id, step_number, content_type, content_data, shortcut_url, method_group,
+    // Validate: if one button field is set, both must be set
+    if ((button_label && !button_link) || (!button_label && button_link)) {
+      return { error: "Nama Tombol dan Tautan Tombol harus diisi keduanya, atau keduanya dikosongkan." };
+    }
+
+    try {
+      getPlatformSlug(platform_name);
+    } catch {
+      return { error: `Platform "${platform_name}" tidak dikenali sistem.` };
+    }
+
+    const tableName = getSolutionsTable(platform_name);
+    const { error } = await supabase.from(tableName).insert({
+      issue_id, step_number, content_type, content_data, method_group, button_label, button_link,
     });
     if (error) return { error: error.message };
 
@@ -135,10 +160,11 @@ export async function createSolution(_: ActionResult, formData: FormData): Promi
   }
 }
 
-export async function deleteSolution(id: string): Promise<ActionResult> {
+export async function deleteSolution(platformName: string, id: string): Promise<ActionResult> {
   try {
     const supabase = await verifyAdmin();
-    const { error } = await supabase.from("solutions").delete().eq("id", id);
+    const tableName = getSolutionsTable(platformName);
+    const { error } = await supabase.from(tableName).delete().eq("id", id);
     if (error) return { error: error.message };
     revalidatePath("/admin/solutions");
     return { success: true };

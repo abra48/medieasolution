@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useTroubleshoot } from "@/lib/troubleshoot-context";
 import { createClient } from "@/lib/supabase/client";
+import { getSolutionsTable } from "@/lib/platform-tables";
 
 type Solution = {
   id: string;
@@ -10,7 +11,8 @@ type Solution = {
   step_number: number;
   content_type: string;
   content_data: string;
-  shortcut_url: string | null;
+  button_label: string | null;
+  button_link: string | null;
   method_group: string;
 };
 
@@ -51,6 +53,23 @@ function CopyButton({ text }: { text: string }) {
     >
       {copied ? "Copied" : "Copy"}
     </button>
+  );
+}
+
+/* ——— Dynamic Shortcut Button ——— */
+function DynamicShortcutButton({ label, link }: { label: string; link: string }) {
+  return (
+    <a
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="btn-dynamic-shortcut"
+    >
+      <span className="btn-dynamic-shortcut-label">{label}</span>
+      <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+      </svg>
+    </a>
   );
 }
 
@@ -117,7 +136,7 @@ function VideoContent({ data }: { data: string }) {
 }
 
 /* ——— Template Content ——— */
-function TemplateContent({ data, shortcutUrl }: { data: string; shortcutUrl: string | null }) {
+function TemplateContent({ data, solution }: { data: string; solution: Solution }) {
   return (
     <div className="space-y-3">
       <p className="text-[10px] font-medium text-secondary uppercase tracking-wider">Template — Ready to copy</p>
@@ -130,13 +149,8 @@ function TemplateContent({ data, shortcutUrl }: { data: string; shortcutUrl: str
         <pre className="p-3 text-sm text-text-primary font-mono leading-relaxed whitespace-pre-wrap break-words max-h-60 overflow-y-auto">{data}</pre>
       </div>
 
-      {shortcutUrl && (
-        <a href={shortcutUrl} target="_blank" rel="noopener noreferrer" className="btn-accent-secondary !py-2 !text-xs inline-flex">
-          Open form
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-          </svg>
-        </a>
+      {solution.button_label && solution.button_link && (
+        <DynamicShortcutButton label={solution.button_label} link={solution.button_link} />
       )}
     </div>
   );
@@ -146,20 +160,22 @@ function TemplateContent({ data, shortcutUrl }: { data: string; shortcutUrl: str
 function ContentRenderer({ solution }: { solution: Solution }) {
   switch (solution.content_type) {
     case "video":
-      return <VideoContent data={solution.content_data} />;
+      return (
+        <div className="space-y-3">
+          <VideoContent data={solution.content_data} />
+          {solution.button_label && solution.button_link && (
+            <DynamicShortcutButton label={solution.button_label} link={solution.button_link} />
+          )}
+        </div>
+      );
     case "template":
-      return <TemplateContent data={solution.content_data} shortcutUrl={solution.shortcut_url} />;
+      return <TemplateContent data={solution.content_data} solution={solution} />;
     case "link":
       return (
         <div className="space-y-3">
           <TextContent data={solution.content_data} />
-          {solution.shortcut_url && (
-            <a href={solution.shortcut_url} target="_blank" rel="noopener noreferrer" className="btn-accent-secondary !py-2 !text-xs inline-flex">
-              Open link
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </a>
+          {solution.button_label && solution.button_link && (
+            <DynamicShortcutButton label={solution.button_label} link={solution.button_link} />
           )}
         </div>
       );
@@ -167,13 +183,8 @@ function ContentRenderer({ solution }: { solution: Solution }) {
       return (
         <div className="space-y-3">
           <TextContent data={solution.content_data} />
-          {solution.shortcut_url && (
-            <a href={solution.shortcut_url} target="_blank" rel="noopener noreferrer" className="btn-accent-secondary !py-2 !text-xs inline-flex">
-              Open link
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </a>
+          {solution.button_label && solution.button_link && (
+            <DynamicShortcutButton label={solution.button_label} link={solution.button_link} />
           )}
         </div>
       );
@@ -204,16 +215,17 @@ export function SolutionViewer() {
   const [expandedSteps, setExpandedSteps] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    if (!selectedIssue) return;
+    if (!selectedIssue || !selectedPlatform) return;
 
     const fetchSolutions = async () => {
       setLoading(true);
       setExpandedSteps(new Set());
       setActiveMethod(0);
       const supabase = createClient();
+      const tableName = getSolutionsTable(selectedPlatform.name);
       const { data, error } = await supabase
-        .from("solutions")
-        .select("id, issue_id, step_number, content_type, content_data, shortcut_url, method_group")
+        .from(tableName)
+        .select("id, issue_id, step_number, content_type, content_data, button_label, button_link, method_group")
         .eq("issue_id", selectedIssue.id)
         .order("method_group")
         .order("step_number");
@@ -226,7 +238,7 @@ export function SolutionViewer() {
     };
 
     fetchSolutions();
-  }, [selectedIssue]);
+  }, [selectedIssue, selectedPlatform]);
 
   if (!selectedIssue || !selectedPlatform) return null;
 

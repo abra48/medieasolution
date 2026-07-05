@@ -18,7 +18,6 @@ export type Platform = {
 
 export type Issue = {
   id: string;
-  platform_id: string;
   issue_name: string;
   description: string | null;
 };

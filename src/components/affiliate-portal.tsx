@@ -18,9 +18,10 @@ export function AffiliatePortal({ userId }: { userId: string }) {
       try {
         const supabase = createClient();
         const { data: affiliate } = await supabase
-          .from("affiliates")
+          .from("users")
           .select("referral_code")
-          .eq("user_id", userId)
+          .eq("id", userId)
+          .not("referral_code", "is", null)
           .single();
 
         if (affiliate) {
