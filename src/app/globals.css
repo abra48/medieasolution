@@ -1,0 +1,457 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+
+/* ========================================
+   MEDIEA SOLUTION — "Tech Pro" Design System
+   Primary: #1e252b (dark bg)
+   Accents: Neon Green (#39FF14) + Gold (#FFD700)
+   ======================================== */
+
+:root {
+  /* — Background Layers — */
+  --bg-primary: #1e252b;
+  --bg-secondary: #252d35;
+  --bg-tertiary: #2c353e;
+  --bg-elevated: #333d47;
+  --bg-input: #1a2028;
+  --bg-overlay: rgba(30, 37, 43, 0.85);
+
+  /* — Accent: Neon Green — */
+  --accent-green: #39FF14;
+  --accent-green-hover: #2ECC40;
+  --accent-green-dim: #1fa82e;
+  --accent-green-glow: rgba(57, 255, 20, 0.25);
+  --accent-green-subtle: rgba(57, 255, 20, 0.08);
+
+  /* — Accent: Gold — */
+  --accent-gold: #FFD700;
+  --accent-gold-hover: #FFC300;
+  --accent-gold-dim: #DAA520;
+  --accent-gold-glow: rgba(255, 215, 0, 0.25);
+  --accent-gold-subtle: rgba(255, 215, 0, 0.08);
+
+  /* — Text — */
+  --text-primary: #F0F2F5;
+  --text-secondary: #9CA3AF;
+  --text-tertiary: #6B7280;
+  --text-inverse: #1e252b;
+
+  /* — Borders — */
+  --border-default: #374151;
+  --border-subtle: #2c353e;
+  --border-focus: #39FF14;
+
+  /* — Status — */
+  --status-danger: #EF4444;
+  --status-danger-dim: #DC2626;
+  --status-success: #22C55E;
+  --status-warning: #F59E0B;
+  --status-info: #3B82F6;
+
+  /* — Shadows — */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-glow-green: 0 0 20px rgba(57, 255, 20, 0.3), 0 0 60px rgba(57, 255, 20, 0.1);
+  --shadow-glow-gold: 0 0 20px rgba(255, 215, 0, 0.3), 0 0 60px rgba(255, 215, 0, 0.1);
+
+  /* — Radius — */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* — Transitions — */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* — Tailwind v4 Theme Extension — */
+@theme inline {
+  /* Colors */
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-tertiary: var(--bg-tertiary);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-bg-input: var(--bg-input);
+
+  --color-accent-green: var(--accent-green);
+  --color-accent-green-hover: var(--accent-green-hover);
+  --color-accent-green-dim: var(--accent-green-dim);
+  --color-accent-green-glow: var(--accent-green-glow);
+  --color-accent-green-subtle: var(--accent-green-subtle);
+
+  --color-accent-gold: var(--accent-gold);
+  --color-accent-gold-hover: var(--accent-gold-hover);
+  --color-accent-gold-dim: var(--accent-gold-dim);
+  --color-accent-gold-glow: var(--accent-gold-glow);
+  --color-accent-gold-subtle: var(--accent-gold-subtle);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-inverse: var(--text-inverse);
+
+  --color-border-default: var(--border-default);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-focus: var(--border-focus);
+
+  --color-danger: var(--status-danger);
+  --color-success: var(--status-success);
+  --color-warning: var(--status-warning);
+  --color-info: var(--status-info);
+
+  /* Fonts */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Shadows */
+  --shadow-glow-green: var(--shadow-glow-green);
+  --shadow-glow-gold: var(--shadow-glow-gold);
+
+  /* Animations */
+  --animate-fade-in: fade-in 0.5s ease-out;
+  --animate-slide-up: slide-up 0.5s ease-out;
+  --animate-slide-down: slide-down 0.4s ease-out;
+  --animate-scale-in: scale-in 0.3s ease-out;
+  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
+}
+
+/* — Keyframes — */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(57, 255, 20, 0.2); }
+  50% { box-shadow: 0 0 40px rgba(57, 255, 20, 0.4), 0 0 80px rgba(57, 255, 20, 0.1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes grid-pulse {
+  0%, 100% { opacity: 0.03; }
+  50% { opacity: 0.06; }
+}
+
+@keyframes scan {
+  0% { top: -128px; }
+  100% { top: 100%; }
+}
+
+/* — Dark Theme Enforcement — */
+/* Locks "Tech Pro" dark theme as the unalterable system default.
+   Prevents browser light-mode overrides and system theme leaks. */
+html, body {
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Override: force dark values even if OS is light */
+    --bg-primary: #1e252b;
+    --bg-secondary: #252d35;
+    --bg-tertiary: #2c353e;
+    --bg-elevated: #333d47;
+    --bg-input: #1a2028;
+    --text-primary: #F0F2F5;
+    --text-secondary: #9CA3AF;
+    --text-tertiary: #6B7280;
+    --border-default: #374151;
+  }
+}
+
+/* — Base Styles — */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-primary);
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* — Custom Scrollbar — */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* — Selection — */
+::selection {
+  background: rgba(57, 255, 20, 0.2);
+  color: var(--text-primary);
+}
+
+/* — Focus Styles — */
+*:focus-visible {
+  outline: 2px solid var(--accent-green);
+  outline-offset: 2px;
+}
+
+/* — Glassmorphism Utility — */
+.glass {
+  background: rgba(37, 45, 53, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(55, 65, 81, 0.5);
+}
+
+.glass-strong {
+  background: rgba(37, 45, 53, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(55, 65, 81, 0.6);
+}
+
+/* — Grid Background Pattern — */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(57, 255, 20, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57, 255, 20, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: grid-pulse 4s ease-in-out infinite;
+}
+
+/* — Gradient Text — */
+.text-gradient-green {
+  background: linear-gradient(135deg, var(--accent-green), var(--accent-green-hover));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dim));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-mixed {
+  background: linear-gradient(135deg, var(--accent-green), var(--accent-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* — Button Base — */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 28px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  border-radius: var(--radius-md);
+  background: var(--accent-green);
+  color: var(--text-inverse);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover {
+  background: var(--accent-green-hover);
+  box-shadow: var(--shadow-glow-green);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 28px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent-green);
+  color: var(--accent-green);
+  background: var(--accent-green-subtle);
+}
+
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 28px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dim));
+  color: var(--text-inverse);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.btn-gold:hover {
+  box-shadow: var(--shadow-glow-gold);
+  transform: translateY(-1px);
+}
+
+/* — Card Utility — */
+.card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  transition: all var(--transition-base);
+}
+
+.card:hover {
+  border-color: var(--accent-green);
+  box-shadow: 0 0 0 1px var(--accent-green-subtle);
+}
+
+/* — Input Utility — */
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent-green);
+  box-shadow: 0 0 0 3px var(--accent-green-glow);
+}
+
+.input::placeholder {
+  color: var(--text-tertiary);
+}
+
+/* — Skeleton Loader — */
+.bg-skeleton {
+  background: linear-gradient(
+    110deg,
+    var(--bg-tertiary) 8%,
+    var(--bg-elevated) 18%,
+    var(--bg-tertiary) 33%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+/* — Scrollbar — */
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* — Mobile Optimizations — */
+@media (max-width: 640px) {
+  /* Prevent text size adjustment on orientation change */
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+  /* Optimize touch targets — minimum 44px for interactive elements */
+  button, a, select, input[type="checkbox"], input[type="radio"] {
+    min-height: 44px;
+  }
+
+  /* Prevent horizontal scroll from overflowing elements */
+  body { overflow-x: hidden; }
+
+  /* Reduce animation complexity on mobile for performance */
+  .animate-pulse-glow { animation: none; }
+
+  /* Reduce clip-path complexity for GPU performance */
+  .mobile-simplify {
+    clip-path: none !important;
+    border-radius: 2px;
+  }
+
+  /* Prevent zoom on input focus (iOS) */
+  input, select, textarea { font-size: 16px !important; }
+}
+
+/* — GPU Acceleration for animated elements — */
+.animate-fade-in,
+.animate-slide-up,
+.animate-scale-in {
+  will-change: opacity, transform;
+}
+
+/* — Reduce motion for users who prefer it — */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* — Print Optimization — */
+@media print {
+  aside, nav, .no-print { display: none !important; }
+  main { padding: 0 !important; }
+}
+
