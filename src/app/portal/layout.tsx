@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { logout } from "@/app/actions/auth";
 import Link from "next/link";
 import { DynamicPopUp } from "@/components/dynamic-popup";
+import { isAdminRole } from "@/lib/admin-roles";
 
 export default async function PortalLayout({
   children,
@@ -21,13 +22,16 @@ export default async function PortalLayout({
     .single();
 
   const isAffiliate = profile?.role === "affiliate";
+  const isAdmin = isAdminRole(profile?.role);
 
   const NAV_LINKS = [
-    { label: "Portal", href: "/portal" },
-    { label: "Support", href: "/portal/support" },
-    { label: "Articles", href: "/portal/articles" },
-    { label: "Modules", href: "/portal/modules" },
+    { label: "Beranda", href: "/portal" },
+    { label: "Pemulihan", href: "/portal/troubleshoot" },
+    { label: "Dukungan", href: "/portal/support" },
+    { label: "Artikel", href: "/portal/articles" },
+    { label: "Modul", href: "/portal/modules" },
     ...(isAffiliate ? [{ label: "Affiliate", href: "/portal/affiliate" }] : []),
+    ...(isAdmin ? [{ label: "⚙ Admin Panel", href: "/admin" }] : []),
   ];
 
   return (

@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { isAdminLead } from "@/lib/admin-roles";
+import { revalidatePath } from "next/cache";
 
 export type AccessCodeState = {
   success?: boolean;
@@ -69,7 +70,8 @@ export async function redeemAccessCode(
     return { error: "Gagal mengaktifkan kode. Silakan coba lagi." };
   }
 
-  return { success: true, message: "Kode akses berhasil diaktifkan. Panduan premium telah dibuka." };
+  revalidatePath("/portal");
+  return { success: true, message: "Kode akses berhasil diaktifkan! Halaman akan dimuat ulang..." };
 }
 
 function generateRandomCode(length: number = 12): string {
