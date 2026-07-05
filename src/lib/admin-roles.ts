@@ -70,6 +70,9 @@ export type NavPermission = {
   codes: boolean;
   affiliates: boolean;
   assets: boolean;
+  articles: boolean;
+  modules: boolean;
+  support: boolean;
 };
 
 export function getNavPermissions(role: string | null | undefined): NavPermission {
@@ -84,5 +87,8 @@ export function getNavPermissions(role: string | null | undefined): NavPermissio
     codes: isLead,
     affiliates: isLead,
     assets: true, // all tiers (junior restricted to articles/testimonials at app layer)
+    articles: true, // all tiers can manage articles
+    modules: isSenior,
+    support: true, // all tiers
   };
 }
