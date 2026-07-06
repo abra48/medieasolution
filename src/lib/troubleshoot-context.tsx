@@ -23,11 +23,14 @@ export type Issue = {
 };
 
 export type TroubleshootStep = "platform" | "issue" | "solution";
+export type TransitionDirection = "forward" | "backward" | "none";
 
 type TroubleshootState = {
   currentStep: TroubleshootStep;
   selectedPlatform: Platform | null;
   selectedIssue: Issue | null;
+  transitionDirection: TransitionDirection;
+  isTransitioning: boolean;
   selectPlatform: (platform: Platform) => void;
   selectIssue: (issue: Issue) => void;
   goBack: () => void;
@@ -54,33 +57,67 @@ export function TroubleshootProvider({ children }: { children: ReactNode }) {
     null
   );
   const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null);
+  const [transitionDirection, setTransitionDirection] =
+    useState<TransitionDirection>("none");
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const selectPlatform = useCallback((platform: Platform) => {
-    setSelectedPlatform(platform);
-    setSelectedIssue(null);
-    setCurrentStep("issue");
-  }, []);
+  const triggerTransition = useCallback(
+    (
+      direction: TransitionDirection,
+      callback: () => void,
+      delay = 350
+    ) => {
+      setTransitionDirection(direction);
+      setIsTransitioning(true);
+      // Wait for exit animation, then switch step
+      setTimeout(() => {
+        callback();
+        setIsTransitioning(false);
+      }, delay);
+    },
+    []
+  );
 
-  const selectIssue = useCallback((issue: Issue) => {
-    setSelectedIssue(issue);
-    setCurrentStep("solution");
-  }, []);
+  const selectPlatform = useCallback(
+    (platform: Platform) => {
+      triggerTransition("forward", () => {
+        setSelectedPlatform(platform);
+        setSelectedIssue(null);
+        setCurrentStep("issue");
+      });
+    },
+    [triggerTransition]
+  );
+
+  const selectIssue = useCallback(
+    (issue: Issue) => {
+      triggerTransition("forward", () => {
+        setSelectedIssue(issue);
+        setCurrentStep("solution");
+      });
+    },
+    [triggerTransition]
+  );
 
   const goBack = useCallback(() => {
-    if (currentStep === "solution") {
-      setSelectedIssue(null);
-      setCurrentStep("issue");
-    } else if (currentStep === "issue") {
-      setSelectedPlatform(null);
-      setCurrentStep("platform");
-    }
-  }, [currentStep]);
+    triggerTransition("backward", () => {
+      if (currentStep === "solution") {
+        setSelectedIssue(null);
+        setCurrentStep("issue");
+      } else if (currentStep === "issue") {
+        setSelectedPlatform(null);
+        setCurrentStep("platform");
+      }
+    });
+  }, [currentStep, triggerTransition]);
 
   const reset = useCallback(() => {
-    setSelectedPlatform(null);
-    setSelectedIssue(null);
-    setCurrentStep("platform");
-  }, []);
+    triggerTransition("backward", () => {
+      setSelectedPlatform(null);
+      setSelectedIssue(null);
+      setCurrentStep("platform");
+    });
+  }, [triggerTransition]);
 
   return (
     <TroubleshootContext.Provider
@@ -88,6 +125,8 @@ export function TroubleshootProvider({ children }: { children: ReactNode }) {
         currentStep,
         selectedPlatform,
         selectedIssue,
+        transitionDirection,
+        isTransitioning,
         selectPlatform,
         selectIssue,
         goBack,

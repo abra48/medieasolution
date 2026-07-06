@@ -109,6 +109,265 @@
   100% { background-position: 200% 0; }
 }
 
+/* ——— Animation Utilities ——— */
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out both;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.5s ease-out both;
+}
+
+.animate-slide-down {
+  animation: slide-down 0.4s ease-out both;
+}
+
+/* ——— Troubleshoot Flow Animations ——— */
+@keyframes ts-step-enter-kf {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.ts-step-enter {
+  animation: ts-step-enter-kf 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes ts-card-stagger-kf {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ts-card-stagger {
+  opacity: 0;
+  animation: ts-card-stagger-kf 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Page transition: slide in from right */
+@keyframes page-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(60px) scale(0.97);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Page transition: slide in from left (going back) */
+@keyframes page-slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-60px) scale(0.97);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Page transition: scale up entrance */
+@keyframes page-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Exit animations */
+@keyframes page-slide-out-left {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-40px) scale(0.97);
+    filter: blur(4px);
+  }
+}
+
+@keyframes page-slide-out-right {
+  from {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(40px) scale(0.97);
+    filter: blur(4px);
+  }
+}
+
+.page-enter-right {
+  animation: page-slide-in-right 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.page-enter-left {
+  animation: page-slide-in-left 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.page-enter-scale {
+  animation: page-scale-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.page-exit-left {
+  animation: page-slide-out-left 0.35s cubic-bezier(0.55, 0, 1, 0.45) both;
+  pointer-events: none;
+}
+
+.page-exit-right {
+  animation: page-slide-out-right 0.35s cubic-bezier(0.55, 0, 1, 0.45) both;
+  pointer-events: none;
+}
+
+/* Glow pulse for selected cards */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 15px rgba(16, 185, 129, 0.15); }
+  50% { box-shadow: 0 0 30px rgba(16, 185, 129, 0.3); }
+}
+
+.glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+/* Ripple effect on click */
+@keyframes ripple-expand {
+  from {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Floating gradient orbs for portal background */
+@keyframes portal-orb-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 30px) scale(0.9); }
+}
+
+@keyframes portal-orb-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-40px, 20px) scale(0.95); }
+  66% { transform: translate(25px, -40px) scale(1.05); }
+}
+
+@keyframes portal-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.portal-orb-1 {
+  animation: portal-orb-1 20s ease-in-out infinite;
+}
+
+.portal-orb-2 {
+  animation: portal-orb-2 25s ease-in-out infinite;
+  animation-delay: -5s;
+}
+
+.portal-float {
+  animation: portal-float 3s ease-in-out infinite;
+}
+
+/* Issue card hover effect */
+@keyframes issue-card-shine {
+  from { left: -100%; }
+  to { left: 200%; }
+}
+
+.issue-card:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.05), transparent);
+  animation: issue-card-shine 0.6s ease-out;
+}
+
+/* Solution page entrance */
+@keyframes solution-header-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes solution-card-enter {
+  from {
+    opacity: 0;
+    transform: translateX(-20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.solution-header-enter {
+  animation: solution-header-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.solution-card-enter {
+  opacity: 0;
+  animation: solution-card-enter 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Success checkmark animation */
+@keyframes checkmark-draw {
+  from { stroke-dashoffset: 24; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* Subtle background grid pattern */
+.portal-grid-bg {
+  background-image:
+    linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
 /* ——— Base ——— */
 html, body {
   color-scheme: dark;

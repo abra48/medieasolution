@@ -45,13 +45,13 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button
       onClick={handleCopy}
-      className={`text-[10px] font-medium px-2.5 py-1 rounded-md border transition-colors ${
+      className={`text-[10px] font-medium px-2.5 py-1 rounded-md border transition-all duration-300 ${
         copied
-          ? "bg-accent/10 text-accent border-accent/20"
-          : "bg-bg-secondary text-text-tertiary border-border-default hover:text-text-primary"
+          ? "bg-accent/10 text-accent border-accent/20 scale-105"
+          : "bg-bg-secondary text-text-tertiary border-border-default hover:text-text-primary hover:border-accent/20"
       }`}
     >
-      {copied ? "Copied" : "Copy"}
+      {copied ? "✓ Copied" : "Copy"}
     </button>
   );
 }
@@ -63,10 +63,10 @@ function DynamicShortcutButton({ label, link }: { label: string; link: string })
       href={link}
       target="_blank"
       rel="noopener noreferrer"
-      className="btn-dynamic-shortcut"
+      className="group inline-flex items-center gap-2.5 px-5 py-3 rounded-xl bg-accent/10 border border-accent/20 text-accent font-semibold text-sm hover:bg-accent hover:text-white transition-all duration-300 hover:shadow-[0_4px_20px_rgba(16,185,129,0.25)]"
     >
-      <span className="btn-dynamic-shortcut-label">{label}</span>
-      <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+      <span>{label}</span>
+      <svg className="w-4 h-4 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
       </svg>
     </a>
@@ -81,9 +81,9 @@ function TextContent({ data }: { data: string }) {
         const numberedMatch = line.match(/^(\d+)\.\s(.+)/);
         if (numberedMatch) {
           return (
-            <div key={i} className="flex gap-2.5 mb-1.5">
-              <span className="text-accent font-mono text-xs mt-0.5 shrink-0 w-4 text-right">
-                {numberedMatch[1]}.
+            <div key={i} className="flex gap-2.5 mb-2">
+              <span className="text-accent font-mono text-xs mt-0.5 shrink-0 w-5 h-5 rounded-full bg-accent/10 flex items-center justify-center">
+                {numberedMatch[1]}
               </span>
               <span>{numberedMatch[2]}</span>
             </div>
@@ -119,7 +119,7 @@ function VideoContent({ data }: { data: string }) {
   if (isUrl) {
     return (
       <div className="space-y-2">
-        <div className="relative w-full overflow-hidden bg-bg-primary rounded-lg" style={{ aspectRatio: "16/9" }}>
+        <div className="relative w-full overflow-hidden bg-bg-primary rounded-xl border border-border-subtle" style={{ aspectRatio: "16/9" }}>
           <iframe src={getEmbedUrl(data)} className="absolute inset-0 w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title="Tutorial" />
         </div>
         <a href={data} target="_blank" rel="noopener noreferrer" className="text-xs text-text-tertiary hover:text-accent transition-colors inline-flex items-center gap-1">
@@ -139,14 +139,19 @@ function VideoContent({ data }: { data: string }) {
 function TemplateContent({ data, solution }: { data: string; solution: Solution }) {
   return (
     <div className="space-y-3">
-      <p className="text-[10px] font-medium text-secondary uppercase tracking-wider">Template — Ready to copy</p>
+      <p className="text-[10px] font-medium text-secondary uppercase tracking-wider flex items-center gap-1.5">
+        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+        </svg>
+        Template — Ready to copy
+      </p>
 
-      <div className="bg-bg-input border border-border-default rounded-lg overflow-hidden">
-        <div className="flex items-center justify-between px-3 py-2 border-b border-border-subtle bg-bg-secondary/50">
+      <div className="bg-bg-input border border-border-default rounded-xl overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-border-subtle bg-bg-secondary/50">
           <span className="text-[10px] text-text-tertiary font-mono">template</span>
           <CopyButton text={data} />
         </div>
-        <pre className="p-3 text-sm text-text-primary font-mono leading-relaxed whitespace-pre-wrap break-words max-h-60 overflow-y-auto">{data}</pre>
+        <pre className="p-4 text-sm text-text-primary font-mono leading-relaxed whitespace-pre-wrap break-words max-h-60 overflow-y-auto">{data}</pre>
       </div>
 
       {solution.button_label && solution.button_link && (
@@ -193,15 +198,20 @@ function ContentRenderer({ solution }: { solution: Solution }) {
 
 /* ——— Content Type Badge ——— */
 function TypeBadge({ type }: { type: string }) {
-  const labels: Record<string, string> = {
-    text: "Guide",
-    video: "Video",
-    template: "Template",
-    link: "Link",
+  const config: Record<string, { label: string; color: string }> = {
+    text: { label: "Guide", color: "#10b981" },
+    video: { label: "Video", color: "#8b5cf6" },
+    template: { label: "Template", color: "#f59e0b" },
+    link: { label: "Link", color: "#3b82f6" },
   };
+  const { label, color } = config[type] || config.text;
+
   return (
-    <span className="text-[9px] font-medium text-text-tertiary uppercase tracking-wider px-1.5 py-0.5 bg-bg-tertiary rounded">
-      {labels[type] || "Guide"}
+    <span
+      className="text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full"
+      style={{ backgroundColor: `${color}15`, color }}
+    >
+      {label}
     </span>
   );
 }
@@ -265,51 +275,77 @@ export function SolutionViewer() {
   };
 
   return (
-    <div className="animate-slide-up">
-      {/* Header */}
-      <div className="flex items-center justify-between gap-3 mb-5">
-        <div className="flex items-center gap-3 min-w-0">
-          <button
-            onClick={goBack}
-            className="w-7 h-7 rounded-md flex items-center justify-center bg-bg-secondary border border-border-default text-text-tertiary hover:text-text-primary transition-colors shrink-0"
-          >
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <div className="min-w-0">
-            <p className="text-xs text-text-tertiary">
-              <span className="text-secondary font-medium">{selectedPlatform.name}</span>
-              {" / "}
-              <span className="text-accent font-medium">{selectedIssue.issue_name}</span>
-            </p>
+    <div>
+      {/* Hero-style header */}
+      <div className="relative mb-8 solution-header-enter">
+        {/* Background decoration */}
+        <div className="absolute inset-0 rounded-2xl overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-accent/5 via-transparent to-secondary/5" />
+          <div className="absolute top-0 right-0 w-32 h-32 rounded-full bg-accent/5 blur-2xl" />
+        </div>
+
+        <div className="relative p-6 rounded-2xl border border-accent/20 bg-bg-secondary/50 backdrop-blur-sm">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start gap-4">
+              <button
+                onClick={goBack}
+                className="w-10 h-10 rounded-xl flex items-center justify-center bg-bg-primary border border-border-default text-text-tertiary hover:text-accent hover:border-accent/30 transition-all duration-300 shrink-0 group mt-0.5"
+              >
+                <svg className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-[10px] font-semibold text-secondary uppercase tracking-wider px-2 py-0.5 rounded-full bg-secondary/10 border border-secondary/20">
+                    {selectedPlatform.name}
+                  </span>
+                  <svg className="w-3 h-3 text-text-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                  </svg>
+                  <span className="text-[10px] font-semibold text-accent uppercase tracking-wider px-2 py-0.5 rounded-full bg-accent/10 border border-accent/20">
+                    {selectedIssue.issue_name}
+                  </span>
+                </div>
+                <h2 className="text-xl font-bold text-text-primary">Panduan Solusi</h2>
+                <p className="text-sm text-text-tertiary mt-0.5">Ikuti langkah-langkah berikut untuk menyelesaikan masalah Anda</p>
+              </div>
+            </div>
+            <button
+              onClick={reset}
+              className="text-xs text-text-tertiary hover:text-danger transition-all duration-300 shrink-0 px-3 py-1.5 rounded-lg hover:bg-danger/10 border border-transparent hover:border-danger/20"
+            >
+              Reset
+            </button>
           </div>
         </div>
-        <button onClick={reset} className="text-[10px] text-text-tertiary hover:text-danger transition-colors shrink-0">
-          Reset
-        </button>
       </div>
 
       {/* Loading */}
       {loading && (
-        <div className="space-y-2">
+        <div className="space-y-3">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-16 rounded-lg bg-skeleton" />
+            <div key={i} className="h-20 rounded-xl bg-skeleton animate-pulse" style={{ animationDelay: `${i * 150}ms` }} />
           ))}
         </div>
       )}
 
       {/* Empty */}
       {!loading && solutions.length === 0 && (
-        <div className="card text-center !py-12">
-          <p className="text-sm text-text-secondary">No solutions available yet.</p>
-          <p className="text-xs text-text-tertiary mt-1">Guides for this issue are being prepared.</p>
+        <div className="text-center py-16 rounded-2xl border-2 border-dashed border-border-subtle bg-bg-secondary/50">
+          <div className="w-16 h-16 rounded-2xl bg-bg-tertiary flex items-center justify-center mx-auto mb-4 portal-float">
+            <svg className="w-7 h-7 text-text-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+            </svg>
+          </div>
+          <p className="text-base font-semibold text-text-secondary">Belum ada solusi tersedia</p>
+          <p className="text-sm text-text-tertiary mt-1">Panduan untuk masalah ini sedang disiapkan.</p>
         </div>
       )}
 
       {/* Method Tabs */}
       {!loading && methodGroups.length > 1 && (
-        <div className="flex gap-1 mb-4 overflow-x-auto">
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-1 solution-header-enter" style={{ animationDelay: "0.1s" }}>
           {methodGroups.map((group, i) => (
             <button
               key={group.label}
@@ -317,14 +353,14 @@ export function SolutionViewer() {
                 setActiveMethod(i);
                 if (group.steps.length > 0) setExpandedSteps(new Set([group.steps[0].id]));
               }}
-              className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors shrink-0 ${
+              className={`px-4 py-2 text-sm font-medium rounded-xl transition-all duration-300 shrink-0 ${
                 activeMethod === i
-                  ? "bg-accent text-text-inverse"
-                  : "bg-bg-secondary text-text-tertiary hover:text-text-primary"
+                  ? "bg-accent text-text-inverse shadow-[0_4px_16px_rgba(16,185,129,0.25)]"
+                  : "bg-bg-secondary text-text-tertiary hover:text-text-primary border border-border-subtle hover:border-accent/20"
               }`}
             >
               {group.label}
-              <span className="ml-1.5 text-[9px] opacity-70">{group.steps.length}</span>
+              <span className="ml-2 text-xs opacity-70">{group.steps.length} langkah</span>
             </button>
           ))}
         </div>
@@ -332,37 +368,66 @@ export function SolutionViewer() {
 
       {/* Steps */}
       {!loading && currentGroup && (
-        <div className="space-y-2">
-          {currentGroup.steps.map((solution) => {
+        <div className="space-y-3">
+          {currentGroup.steps.map((solution, i) => {
             const isExpanded = expandedSteps.has(solution.id);
             return (
-              <div key={solution.id} className={`rounded-lg border transition-colors ${isExpanded ? "border-accent/30 bg-bg-secondary" : "border-border-default bg-bg-secondary"}`}>
+              <div
+                key={solution.id}
+                className={`solution-card-enter rounded-xl border-2 transition-all duration-300 ${
+                  isExpanded
+                    ? "border-accent/30 bg-bg-secondary shadow-[0_4px_24px_rgba(16,185,129,0.08)]"
+                    : "border-border-subtle bg-bg-secondary hover:border-border-default"
+                }`}
+                style={{ animationDelay: `${(i + 1) * 100}ms` }}
+              >
                 <button
                   onClick={() => toggleStep(solution.id)}
-                  className="w-full text-left px-4 py-3 flex items-center gap-3"
+                  className="w-full text-left px-5 py-4 flex items-center gap-4"
                 >
-                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-medium shrink-0 ${isExpanded ? "bg-accent text-text-inverse" : "bg-bg-tertiary text-text-tertiary"}`}>
-                    {solution.step_number}
-                  </span>
+                  {/* Step number circle */}
+                  <div className="relative">
+                    <span
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 transition-all duration-300 ${
+                        isExpanded
+                          ? "bg-accent text-text-inverse shadow-[0_0_12px_rgba(16,185,129,0.3)]"
+                          : "bg-bg-tertiary text-text-tertiary"
+                      }`}
+                    >
+                      {solution.step_number}
+                    </span>
+                    {/* Connecting line to next step */}
+                    {i < currentGroup.steps.length - 1 && (
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 w-0.5 h-3 bg-border-subtle" />
+                    )}
+                  </div>
+
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-text-tertiary">Step {solution.step_number}</span>
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="text-sm font-semibold text-text-primary">Langkah {solution.step_number}</span>
                       <TypeBadge type={solution.content_type} />
                     </div>
                     {!isExpanded && (
-                      <p className="text-sm text-text-secondary truncate mt-0.5">
-                        {solution.content_data.substring(0, 80)}{solution.content_data.length > 80 ? "..." : ""}
+                      <p className="text-sm text-text-tertiary truncate">
+                        {solution.content_data.substring(0, 100)}{solution.content_data.length > 100 ? "..." : ""}
                       </p>
                     )}
                   </div>
-                  <svg className={`w-4 h-4 text-text-tertiary shrink-0 transition-transform ${isExpanded ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+
+                  <svg
+                    className={`w-5 h-5 text-text-tertiary shrink-0 transition-all duration-300 ${isExpanded ? "rotate-180 text-accent" : ""}`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
 
                 {isExpanded && (
-                  <div className="px-4 pb-4 pt-0 border-t border-border-subtle">
-                    <div className="pt-3">
+                  <div className="px-5 pb-5 pt-0 border-t border-border-subtle/50 animate-slide-up">
+                    <div className="pt-4 ml-12">
                       <ContentRenderer solution={solution} />
                     </div>
                   </div>
@@ -371,7 +436,15 @@ export function SolutionViewer() {
             );
           })}
 
-          <p className="text-xs text-text-tertiary pt-2 italic">End of guide.</p>
+          {/* Completion indicator */}
+          <div className="flex items-center gap-3 pt-4 pb-2 solution-card-enter" style={{ animationDelay: `${(currentGroup.steps.length + 1) * 100}ms` }}>
+            <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
+              <svg className="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <p className="text-sm text-text-tertiary italic">Akhir panduan — Semoga berhasil!</p>
+          </div>
         </div>
       )}
     </div>
