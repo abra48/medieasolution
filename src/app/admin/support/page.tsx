@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { AssetForm } from "../assets/asset-form";
 import { AssetTable } from "../assets/asset-table";
+import { ContactSettings } from "./contact-settings";
 
 export default async function AdminSupportPage() {
   const supabase = await createClient();
@@ -55,6 +56,8 @@ export default async function AdminSupportPage() {
         </svg>
         Gunakan tipe &quot;article&quot; untuk FAQ, &quot;testimonial&quot; untuk testimoni pengguna, &quot;banner&quot; untuk banner promosi, dan &quot;pop_up&quot; untuk pop-up notifikasi.
       </div>
+
+      <ContactSettings />
 
       <AssetForm />
 

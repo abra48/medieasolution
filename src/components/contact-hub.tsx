@@ -1,24 +1,58 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { getContactSettings } from "@/app/actions/contact";
+
 export function ContactHub() {
-  const CONTACTS = [
+  const [contacts, setContacts] = useState([
     {
       label: "WhatsApp",
-      description: "Chat directly with our recovery team.",
-      url: "https://wa.me/6281234567890",
+      description: "Chat langsung dengan tim pemulihan kami.",
+      url: "https://wa.me/6281241511156",
       color: "#25D366",
     },
     {
       label: "Telegram",
-      description: "Reach us via Telegram for support.",
+      description: "Hubungi kami via Telegram untuk bantuan.",
       url: "https://t.me/medieasolution",
       color: "#26A5E4",
     },
-  ];
+    {
+      label: "Website",
+      description: "Kunjungi website resmi kami.",
+      url: "https://mediea.co.id",
+      color: "#10b981",
+    },
+  ]);
+
+  useEffect(() => {
+    getContactSettings().then((settings) => {
+      setContacts([
+        {
+          label: "WhatsApp",
+          description: `Chat langsung — ${settings.phone}`,
+          url: settings.whatsapp_url,
+          color: "#25D366",
+        },
+        {
+          label: "Telegram",
+          description: "Hubungi kami via Telegram untuk bantuan.",
+          url: settings.telegram_url,
+          color: "#26A5E4",
+        },
+        {
+          label: "Website",
+          description: settings.website,
+          url: settings.website.startsWith("http") ? settings.website : `https://${settings.website}`,
+          color: "#10b981",
+        },
+      ]);
+    });
+  }, []);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      {CONTACTS.map((contact) => (
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      {contacts.map((contact) => (
         <a
           key={contact.label}
           href={contact.url}
