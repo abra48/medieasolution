@@ -29,16 +29,10 @@ function TroubleshootContent({ platforms }: { platforms: Platform[] }) {
   };
 
   return (
-    <div className="space-y-6 relative">
-      {/* Background decorative elements */}
-      <div className="pointer-events-none fixed inset-0 overflow-hidden z-0">
-        <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-accent/[0.02] blur-3xl portal-orb-1" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-secondary/[0.02] blur-3xl portal-orb-2" />
-      </div>
-
+    <div className="space-y-5">
       {/* Global error banner */}
       {error && (
-        <div className="relative z-20 flex items-center gap-3 p-3 rounded-xl bg-danger/5 border border-danger/15 animate-slide-down">
+        <div className="flex items-center gap-3 p-3 rounded-lg bg-danger/5 border border-danger/15">
           <svg className="w-4 h-4 text-danger shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
           </svg>
@@ -51,12 +45,10 @@ function TroubleshootContent({ platforms }: { platforms: Platform[] }) {
         </div>
       )}
 
-      <div className="relative z-10">
-        <ProgressTracker />
-      </div>
+      <ProgressTracker />
 
-      {/* Animated page container */}
-      <div className="relative z-10 min-h-[300px]">
+      {/* Page container */}
+      <div className="min-h-[300px]">
         {isTransitioning && (
           <div key={`exit-${currentStep}`} className={getExitClass()}>
             {currentStep === "platform" && <PlatformGrid platforms={platforms} />}
