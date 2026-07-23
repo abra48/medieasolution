@@ -31,16 +31,17 @@ export default async function PortalLayout({
     { label: "Artikel", href: "/portal/articles" },
     { label: "Modul", href: "/portal/modules" },
     ...(isAffiliate ? [{ label: "Affiliate", href: "/portal/affiliate" }] : []),
-    ...(isAdmin ? [{ label: "⚙ Admin Panel", href: "/admin" }] : []),
+    ...(isAdmin ? [{ label: "Admin", href: "/admin" }] : []),
   ];
 
   return (
     <div className="min-h-screen bg-bg-primary">
       <nav className="sticky top-0 z-50 glass">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="h-14 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6">
+          {/* Top bar */}
+          <div className="h-12 sm:h-14 flex items-center justify-between gap-2">
             <Link href="/portal" className="flex items-center gap-2 shrink-0">
-              <div className="w-7 h-7 rounded-md bg-accent/10 border border-accent/20 flex items-center justify-center">
+              <div className="w-7 h-7 rounded-md bg-accent/10 border border-accent/20 flex items-center justify-center flex-shrink-0">
                 <span className="text-accent text-xs font-semibold">M</span>
               </div>
               <span className="font-semibold text-sm text-text-primary hidden sm:inline">
@@ -48,7 +49,7 @@ export default async function PortalLayout({
               </span>
             </Link>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <span className="text-xs text-text-tertiary hidden md:block truncate max-w-[160px]">
                 {user.email}
               </span>
@@ -58,19 +59,20 @@ export default async function PortalLayout({
                 </span>
               )}
               <form action={logout}>
-                <button type="submit" className="text-xs text-text-tertiary hover:text-danger transition-colors">
+                <button type="submit" className="text-xs text-text-tertiary hover:text-danger transition-colors whitespace-nowrap">
                   Sign out
                 </button>
               </form>
             </div>
           </div>
 
-          <div className="flex gap-0 -mb-px overflow-x-auto scrollbar-none">
+          {/* Nav tabs — horizontal scroll on mobile */}
+          <div className="flex gap-0 -mb-px overflow-x-auto scrollbar-none -mx-3 px-3 sm:mx-0 sm:px-0">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-3 py-2 text-xs font-medium text-text-tertiary hover:text-text-primary transition-colors shrink-0 border-b-2 border-transparent hover:border-accent/30"
+                className="px-3 py-2 text-xs font-medium text-text-tertiary hover:text-text-primary transition-colors shrink-0 border-b-2 border-transparent hover:border-accent/30 whitespace-nowrap"
               >
                 {link.label}
               </Link>
@@ -79,7 +81,7 @@ export default async function PortalLayout({
         </div>
       </nav>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">{children}</main>
+      <main className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-8">{children}</main>
       <DynamicPopUp />
     </div>
   );

@@ -159,18 +159,18 @@ export function IssueSelector() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
           {issues.map((issue) => {
             const icon = getIssueIcon(issue.issue_name);
             return (
               <button
                 key={issue.id}
                 onClick={() => selectIssue(issue)}
-                className="group text-left rounded-xl border border-border-subtle bg-bg-secondary hover:border-border-default transition-colors duration-200 p-4"
+                className="group text-left rounded-xl border border-border-subtle bg-bg-secondary hover:border-border-default transition-colors duration-200 p-3 sm:p-4"
               >
                 <div className="flex items-start gap-3">
                   <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 text-text-tertiary"
+                    className="w-8 h-8 min-w-[32px] min-h-[32px] rounded-lg flex items-center justify-center flex-shrink-0 text-text-tertiary"
                     style={{ backgroundColor: 'var(--bg-tertiary)' }}
                   >
                     {icon}

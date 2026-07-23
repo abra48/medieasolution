@@ -578,8 +578,46 @@ body {
 /* ——— Mobile ——— */
 @media (max-width: 640px) {
   html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
-  button, a, select, input[type="checkbox"], input[type="radio"] { min-height: 44px; }
+  
+  /* Touch-friendly minimum target sizes */
+  button, a, select, input[type="checkbox"], input[type="radio"] { 
+    min-height: 44px; 
+    min-width: 44px;
+  }
+  
+  /* Prevent zoom on input focus (iOS) */
   input, select, textarea { font-size: 16px !important; }
+  
+  /* Fix squished icons — ensure SVGs maintain aspect ratio */
+  svg {
+    flex-shrink: 0;
+  }
+  
+  /* Fix platform grid on mobile */
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  /* Prevent overflow on mobile */
+  body {
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Portal nav scrollable on mobile */
+  .glass {
+    padding-bottom: 0;
+  }
+}
+
+/* Small phones */
+@media (max-width: 375px) {
+  .grid-cols-2 {
+    gap: 8px !important;
+  }
+  
+  h1 { font-size: 1.375rem !important; }
+  h2 { font-size: 1.125rem !important; }
 }
 
 /* ——— Reduced motion ——— */

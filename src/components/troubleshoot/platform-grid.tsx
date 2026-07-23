@@ -68,7 +68,7 @@ export function PlatformGrid({ platforms }: { platforms: Platform[] }) {
         <p className="text-sm text-text-tertiary mt-0.5">Pilih akun media sosial yang perlu dipulihkan.</p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
         {platforms.map((platform) => {
           const isHovered = hoveredId === platform.id;
           const brand = getPlatformBrand(platform.name);
@@ -85,11 +85,11 @@ export function PlatformGrid({ platforms }: { platforms: Platform[] }) {
                 borderColor: isHovered ? `${brand.primary}30` : undefined,
               }}
             >
-              <div className="p-4">
-                <div className="mb-3">
+              <div className="p-3 sm:p-4">
+                <div className="mb-2 sm:mb-3">
                   {icon ? (
                     <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-200"
+                      className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-lg flex items-center justify-center flex-shrink-0"
                       style={{
                         color: brand.primary,
                         backgroundColor: `${brand.primary}0a`,
@@ -101,11 +101,11 @@ export function PlatformGrid({ platforms }: { platforms: Platform[] }) {
                     <img
                       src={platform.icon_url}
                       alt=""
-                      className="w-10 h-10 rounded-lg object-cover"
+                      className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-lg object-cover flex-shrink-0"
                     />
                   ) : (
                     <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-sm"
+                      className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-lg flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
                       style={{ background: brand.gradient }}
                     >
                       {platform.name.charAt(0)}
@@ -113,7 +113,7 @@ export function PlatformGrid({ platforms }: { platforms: Platform[] }) {
                   )}
                 </div>
 
-                <span className="text-sm font-semibold text-text-primary block">
+                <span className="text-xs sm:text-sm font-semibold text-text-primary block">
                   {platform.name}
                 </span>
               </div>
