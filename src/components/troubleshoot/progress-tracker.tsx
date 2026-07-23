@@ -1,9 +1,9 @@
 "use client";
 
-import { useTroubleshoot } from "@/lib/troubleshoot-context";
+import { useTroubleshoot, getPlatformBrand } from "@/lib/troubleshoot-context";
 
 export function ProgressTracker() {
-  const { currentStep } = useTroubleshoot();
+  const { currentStep, selectedPlatform } = useTroubleshoot();
 
   const STEPS = [
     { key: "platform" as const, label: "Platform", number: 1, icon: (
@@ -25,6 +25,7 @@ export function ProgressTracker() {
 
   const stepOrder = { platform: 1, issue: 2, solution: 3 };
   const currentNum = stepOrder[currentStep];
+  const brand = selectedPlatform ? getPlatformBrand(selectedPlatform.name) : null;
 
   return (
     <div className="animate-fade-in">
@@ -33,25 +34,43 @@ export function ProgressTracker() {
           const isActive = currentNum >= s.number;
           const isCurrent = currentNum === s.number;
           const isPast = currentNum > s.number;
+
+          // Use platform brand color for past/current steps when platform is selected
+          const activeColor = brand && (isCurrent || isPast) ? brand.primary : undefined;
+
           return (
             <div key={s.key} className="flex items-center gap-1.5 flex-1">
               <div
                 className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl flex-1 transition-all duration-500 ${
                   isCurrent
-                    ? "bg-accent/10 border border-accent/25 shadow-[0_0_16px_rgba(16,185,129,0.1)]"
+                    ? "shadow-sm"
                     : isPast
                     ? "bg-bg-tertiary/50"
                     : "opacity-35"
                 }`}
+                style={{
+                  ...(isCurrent ? {
+                    backgroundColor: activeColor ? `${activeColor}12` : 'rgba(16,185,129,0.1)',
+                    border: `1px solid ${activeColor ? `${activeColor}40` : 'rgba(16,185,129,0.25)'}`,
+                    boxShadow: `0 0 16px ${activeColor ? `${activeColor}15` : 'rgba(16,185,129,0.1)'}`,
+                  } : {}),
+                }}
               >
                 <div
                   className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all duration-500 ${
-                    isCurrent
-                      ? "bg-accent text-white shadow-[0_0_10px_rgba(16,185,129,0.4)] scale-110"
-                      : isPast
-                      ? "bg-accent/20 text-accent"
-                      : "bg-bg-tertiary text-text-tertiary"
+                    !isActive ? "bg-bg-tertiary text-text-tertiary" : ""
                   }`}
+                  style={{
+                    ...(isCurrent ? {
+                      backgroundColor: activeColor || '#10b981',
+                      color: '#ffffff',
+                      boxShadow: `0 0 10px ${activeColor ? `${activeColor}60` : 'rgba(16,185,129,0.4)'}`,
+                      transform: 'scale(1.1)',
+                    } : isPast ? {
+                      backgroundColor: `${activeColor || '#10b981'}30`,
+                      color: activeColor || '#10b981',
+                    } : {}),
+                  }}
                 >
                   {isPast ? (
                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -61,17 +80,38 @@ export function ProgressTracker() {
                     s.icon
                   )}
                 </div>
-                <span
-                  className={`text-xs font-semibold transition-all duration-500 ${
-                    isCurrent ? "text-accent" : isPast ? "text-text-secondary" : "text-text-tertiary"
-                  }`}
-                >
-                  {s.label}
-                </span>
+                <div className="flex flex-col min-w-0">
+                  <span
+                    className={`text-xs font-semibold transition-all duration-500 ${
+                      !isActive ? "text-text-tertiary" : ""
+                    }`}
+                    style={{
+                      ...(isCurrent ? { color: activeColor || '#10b981' } : isPast ? { color: 'var(--text-secondary)' } : {}),
+                    }}
+                  >
+                    {s.label}
+                  </span>
+                  {/* Show selected platform name in issue/solution steps */}
+                  {isPast && s.key === "platform" && selectedPlatform && (
+                    <span
+                      className="text-[9px] font-medium truncate max-w-[80px] transition-all duration-300"
+                      style={{ color: activeColor || '#10b981' }}
+                    >
+                      {selectedPlatform.name}
+                    </span>
+                  )}
+                </div>
               </div>
               {i < STEPS.length - 1 && (
                 <div className="flex items-center px-0.5">
-                  <div className={`w-6 h-0.5 rounded-full transition-all duration-500 ${currentNum > s.number ? "bg-accent/40" : "bg-border-subtle"}`} />
+                  <div
+                    className="w-6 h-0.5 rounded-full transition-all duration-500"
+                    style={{
+                      backgroundColor: currentNum > s.number
+                        ? `${activeColor || '#10b981'}60`
+                        : 'var(--border-subtle)',
+                    }}
+                  />
                 </div>
               )}
             </div>

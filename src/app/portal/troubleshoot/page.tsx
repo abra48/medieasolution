@@ -42,26 +42,26 @@ export default async function TroubleshootPage() {
     .order("name");
 
   return (
-    <div className="space-y-6 animate-fade-in portal-grid-bg min-h-[80vh]">
+    <div className="space-y-8 animate-fade-in min-h-[80vh]">
       {/* Header */}
       <div className="relative">
         {/* Decorative background */}
         <div className="absolute inset-0 -m-4 rounded-2xl overflow-hidden pointer-events-none">
-          <div className="absolute top-0 left-1/4 w-40 h-40 rounded-full bg-accent/[0.04] blur-3xl portal-orb-1" />
-          <div className="absolute bottom-0 right-1/4 w-32 h-32 rounded-full bg-secondary/[0.04] blur-3xl portal-orb-2" />
+          <div className="absolute top-0 left-1/4 w-40 h-40 rounded-full bg-accent/[0.03] blur-3xl portal-orb-1" />
+          <div className="absolute bottom-0 right-1/4 w-32 h-32 rounded-full bg-secondary/[0.03] blur-3xl portal-orb-2" />
         </div>
 
         <div className="relative flex items-center justify-between">
           <div>
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2 mb-3">
               <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/10 border border-accent/20">
                 <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
                 <span className="text-[10px] font-semibold text-accent uppercase tracking-wider">Premium</span>
               </div>
             </div>
             <h1 className="text-2xl font-bold text-text-primary">Pemulihan Akun</h1>
-            <p className="text-sm text-text-tertiary mt-1">
-              Pilih platform, identifikasi kendala, dan ikuti panduan solusi.
+            <p className="text-sm text-text-tertiary mt-1.5 max-w-md">
+              Pilih platform, identifikasi kendala, dan ikuti panduan solusi yang spesifik untuk setiap platform.
             </p>
           </div>
 
