@@ -6,8 +6,10 @@ export async function createClient() {
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!url || !key) {
+    // During build time, Supabase env vars may not be available.
+    // Throw a clear error that shows up in Vercel build logs.
     throw new Error(
-      "Missing Supabase environment variables. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY."
+      "SUPABASE ENV MISSING: Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel Environment Variables (Project Settings > Environment Variables), then redeploy."
     );
   }
 
