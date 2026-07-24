@@ -127,9 +127,7 @@ export default function Home() {
       <nav className="fixed top-0 left-0 right-0 z-50 landing-nav" data-landing-nav>
         <div className="max-w-6xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 sm:gap-2.5 group">
-            <div className="w-8 h-8 rounded-full bg-[#10b981] flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
-              <span className="text-white text-xs font-bold tracking-tight">M</span>
-            </div>
+            <img src="https://i.ibb.co.com/qY3R33DK/Gemini-Generated-Image-xmtysbxmtysbxmty.png" alt="Mediea Solution" className="w-8 h-8 rounded-full object-cover transition-transform duration-500 group-hover:scale-110" />
             <span className="text-sm font-semibold tracking-tight l-text nav-logo-text">
               Mediea<span className="landing-gradient-text">Solution</span>
             </span>

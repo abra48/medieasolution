@@ -16,9 +16,7 @@ export default function RegisterPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
-            <div className="w-8 h-8 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center">
-              <span className="text-accent text-sm font-semibold">M</span>
-            </div>
+            <img src="https://i.ibb.co.com/qY3R33DK/Gemini-Generated-Image-xmtysbxmtysbxmty.png" alt="Mediea Solution" className="w-8 h-8 rounded-lg object-cover" />
             <span className="text-base font-semibold text-text-primary">
               Mediea<span className="text-accent">Solution</span>
             </span>

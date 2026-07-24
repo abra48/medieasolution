@@ -41,9 +41,7 @@ export default async function PortalLayout({
           {/* Top bar */}
           <div className="h-12 sm:h-14 flex items-center justify-between gap-2">
             <Link href="/portal" className="flex items-center gap-2 shrink-0">
-              <div className="w-7 h-7 rounded-md bg-accent/10 border border-accent/20 flex items-center justify-center flex-shrink-0">
-                <span className="text-accent text-xs font-semibold">M</span>
-              </div>
+              <img src="https://i.ibb.co.com/qY3R33DK/Gemini-Generated-Image-xmtysbxmtysbxmty.png" alt="Mediea Solution" className="w-7 h-7 rounded-md object-cover flex-shrink-0" />
               <span className="font-semibold text-sm text-text-primary hidden sm:inline">
                 Mediea<span className="text-accent">Solution</span>
               </span>

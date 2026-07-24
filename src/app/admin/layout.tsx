@@ -47,9 +47,7 @@ export default async function AdminLayout({
       <aside className="w-56 bg-bg-secondary border-r border-border-default flex-col shrink-0 hidden md:flex">
         <div className="h-14 px-4 flex items-center border-b border-border-default">
           <Link href="/admin" className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-accent/10 border border-accent/20 flex items-center justify-center">
-              <span className="text-accent text-[10px] font-semibold">M</span>
-            </div>
+            <img src="https://i.ibb.co.com/qY3R33DK/Gemini-Generated-Image-xmtysbxmtysbxmty.png" alt="Mediea Solution" className="w-6 h-6 rounded-md object-cover" />
             <div className="flex flex-col">
               <span className="text-xs font-semibold text-text-primary leading-tight">
                 Mediea<span className="text-accent">Solution</span>
