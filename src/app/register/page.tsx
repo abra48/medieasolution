@@ -5,6 +5,7 @@ import { register, type AuthState } from "@/app/actions/auth";
 import Link from "next/link";
 import { I18nProvider, useI18n } from "@/lib/i18n";
 import { LanguageSwitcher } from "../language-switcher";
+import { GlobalThemeToggle } from "@/components/global-theme-toggle";
 
 function RegisterPageInner() {
   const { t } = useI18n();
@@ -16,9 +17,9 @@ function RegisterPageInner() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-bg-primary">
       <div className="w-full max-w-sm">
-        {/* Language Switcher */}
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-end gap-1.5 mb-4">
           <LanguageSwitcher />
+          <GlobalThemeToggle />
         </div>
 
         {/* Logo */}

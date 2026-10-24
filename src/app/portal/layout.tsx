@@ -4,6 +4,7 @@ import { logout } from "@/app/actions/auth";
 import Link from "next/link";
 import { DynamicPopUp } from "@/components/dynamic-popup";
 import { isAdminRole } from "@/lib/admin-roles";
+import { PortalToolbar } from "@/components/portal-toolbar";
 
 export default async function PortalLayout({
   children,
@@ -56,6 +57,7 @@ export default async function PortalLayout({
                   Affiliate
                 </span>
               )}
+              <PortalToolbar />
               <form action={logout}>
                 <button type="submit" className="text-xs text-text-tertiary hover:text-danger transition-colors whitespace-nowrap">
                   Sign out
