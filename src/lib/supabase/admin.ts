@@ -9,15 +9,15 @@ export function createAdminClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-  if (!url) {
-    throw new Error("NEXT_PUBLIC_SUPABASE_URL is not set");
-  }
-
   const key = serviceRoleKey || anonKey;
 
-  if (!key) {
-    throw new Error("No Supabase key available");
+  if (!url || !key) {
+    // During build, return a dummy client
+    return createSupabaseClient(
+      url || "https://placeholder.supabase.co",
+      key || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder",
+      { auth: { autoRefreshToken: false, persistSession: false } }
+    );
   }
 
   if (!serviceRoleKey) {

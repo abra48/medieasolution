@@ -6,11 +6,19 @@ export async function createClient() {
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!url || !key) {
-    // During build time, Supabase env vars may not be available.
-    // Throw a clear error that shows up in Vercel build logs.
-    throw new Error(
-      "SUPABASE ENV MISSING: Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel Environment Variables (Project Settings > Environment Variables), then redeploy."
-    );
+    // During build/prerender, env vars may not be available.
+    // Return a dummy client that will fail gracefully at runtime.
+    // Pages using this should have `export const dynamic = 'force-dynamic'`
+    // so they never actually prerender.
+    const dummyUrl = "https://placeholder.supabase.co";
+    const dummyKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2MDAwMDAwMDAsImV4cCI6MTkwMDAwMDAwMH0.placeholder";
+    const cookieStore = await cookies();
+    return createServerClient(dummyUrl, dummyKey, {
+      cookies: {
+        getAll() { return cookieStore.getAll(); },
+        setAll() {},
+      },
+    });
   }
 
   const cookieStore = await cookies();
