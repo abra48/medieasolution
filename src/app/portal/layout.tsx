@@ -6,6 +6,8 @@ import { DynamicPopUp } from "@/components/dynamic-popup";
 import { isAdminRole } from "@/lib/admin-roles";
 import { PortalToolbar } from "@/components/portal-toolbar";
 
+export const dynamic = "force-dynamic";
+
 export default async function PortalLayout({
   children,
 }: {

@@ -4,6 +4,8 @@ import { logout } from "@/app/actions/auth";
 import Link from "next/link";
 import { isAdminRole, getNavPermissions, getAdminTierLabel } from "@/lib/admin-roles";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminLayout({
   children,
 }: {
