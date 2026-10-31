@@ -226,7 +226,7 @@ function LandingPageInner() {
           </div>
           <div className="gx-hero-visual gx-hero-animate-4">
             <div className="gx-hero-image-wrapper">
-              <div className="gx-hero-glitch" />
+              <img src="/hero-image.jpg" alt="Digital Recovery" className="gx-hero-img" />
             </div>
           </div>
         </div>
@@ -300,7 +300,11 @@ function LandingPageInner() {
             </div>
             <div className="gx-service-visual">
               <div className="gx-service-image">
-                <span className="gx-service-step-num">{String(i + 1).padStart(2, "0")}</span>
+                {i === 0 ? (
+                  <img src="/service-image.jpg" alt={t(step.titleKey)} className="gx-service-img" />
+                ) : (
+                  <span className="gx-service-step-num">{String(i + 1).padStart(2, "0")}</span>
+                )}
               </div>
             </div>
           </div>

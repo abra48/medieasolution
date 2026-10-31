@@ -38,30 +38,29 @@ export default async function PortalLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-bg-primary">
-      <nav className="sticky top-0 z-50 glass">
-        <div className="max-w-6xl mx-auto px-3 sm:px-6">
+    <div className="min-h-screen" style={{ background: '#0a0a0a', color: '#e8e6e1' }}>
+      <nav className="sticky top-0 z-50" style={{ background: 'rgba(10,10,10,0.92)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-8">
           {/* Top bar */}
-          <div className="h-12 sm:h-14 flex items-center justify-between gap-2">
-            <Link href="/portal" className="flex items-center gap-2 shrink-0">
-              <img src="https://i.ibb.co.com/qY3R33DK/Gemini-Generated-Image-xmtysbxmtysbxmty.png" alt="Mediea Solution" className="w-7 h-7 rounded-md object-cover flex-shrink-0" />
-              <span className="font-semibold text-sm text-text-primary hidden sm:inline">
-                Mediea<span className="text-accent">Solution</span>
-              </span>
+          <div className="h-14 flex items-center justify-between gap-3">
+            <Link href="/portal" className="flex items-center gap-0 shrink-0" style={{ fontFamily: 'Georgia, "Times New Roman", serif', letterSpacing: '-0.02em' }}>
+              <span className="text-sm" style={{ color: '#e8e6e1' }}>mediea</span>
+              <span className="text-sm" style={{ color: '#7a7a72' }}>/</span>
+              <span className="text-sm italic" style={{ color: '#c5c3b8' }}>solution</span>
             </Link>
 
-            <div className="flex items-center gap-2 sm:gap-3">
-              <span className="text-xs text-text-tertiary hidden md:block truncate max-w-[160px]">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <span className="text-xs hidden md:block truncate max-w-[160px]" style={{ color: '#7a7a72' }}>
                 {user.email}
               </span>
               {isAffiliate && (
-                <span className="text-[9px] font-semibold text-secondary uppercase tracking-wider px-2 py-0.5 bg-secondary/10 border border-secondary/20 rounded hidden sm:inline-flex">
+                <span className="text-[9px] font-medium uppercase tracking-wider px-2.5 py-1 rounded-full hidden sm:inline-flex" style={{ color: '#c5c3b8', border: '1px solid rgba(255,255,255,0.12)' }}>
                   Affiliate
                 </span>
               )}
               <PortalToolbar />
               <form action={logout}>
-                <button type="submit" className="text-xs text-text-tertiary hover:text-danger transition-colors whitespace-nowrap">
+                <button type="submit" className="text-xs transition-colors whitespace-nowrap" style={{ color: '#7a7a72', letterSpacing: '0.05em', textTransform: 'uppercase', fontSize: '10px' }}>
                   Sign out
                 </button>
               </form>
@@ -69,13 +68,15 @@ export default async function PortalLayout({
           </div>
 
           {/* Nav tabs — horizontal scroll on mobile */}
-          <div className="flex gap-0 -mb-px overflow-x-auto scrollbar-none -mx-3 px-3 sm:mx-0 sm:px-0">
-            {NAV_LINKS.map((link) => (
+          <div className="flex gap-0 -mb-px overflow-x-auto scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
+            {NAV_LINKS.map((link, i) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-3 py-2 text-xs font-medium text-text-tertiary hover:text-text-primary transition-colors shrink-0 border-b-2 border-transparent hover:border-accent/30 whitespace-nowrap"
+                className="py-2.5 text-[11px] font-medium transition-colors shrink-0 whitespace-nowrap"
+                style={{ color: '#7a7a72', letterSpacing: '0.08em', textTransform: 'uppercase', marginRight: '24px' }}
               >
+                <span style={{ color: '#4a4a44', marginRight: '6px', fontSize: '9px' }}>0{i + 1}</span>
                 {link.label}
               </Link>
             ))}
@@ -83,7 +84,7 @@ export default async function PortalLayout({
         </div>
       </nav>
 
-      <main className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-8 py-6 sm:py-10">
         <div className="portal-page-enter">{children}</div>
       </main>
       <DynamicPopUp />
