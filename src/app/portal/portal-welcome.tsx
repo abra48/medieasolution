@@ -3,26 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {
-  IconGrid,
-  IconBook,
-  IconDocument,
-  IconVideo,
-  IconShieldCheck,
-  IconArticle,
-  IconChat,
-  IconGraduation,
-  IconBolt,
-  IconCheckCircle,
-  IconChevronRight,
-  IconLock,
-  IconAlertCircle,
-  IconSpinner,
-  IconKey,
-  IconCompass,
-  IconWrench,
-  IconVerified,
-} from "@/components/icons";
+
+const gxDark = "#0a0a0a";
+const gxLight = "#f5f3ee";
+const gxMuted = "#7a7a72";
+const gxBorder = "rgba(255,255,255,0.08)";
+const gxSerif = 'Georgia, "Times New Roman", serif';
+const gxMono = '"SF Mono", "Fira Code", monospace';
 
 export function PortalWelcome({ hasAccess }: { hasAccess: boolean }) {
   const router = useRouter();
@@ -35,154 +22,99 @@ export function PortalWelcome({ hasAccess }: { hasAccess: boolean }) {
     e.preventDefault();
     const trimmed = code.trim();
     if (!trimmed || loading) return;
-
     setLoading(true);
     setError("");
     setSuccess("");
-
     try {
       const res = await fetch("/api/redeem-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code: trimmed }),
       });
-
       const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Terjadi kesalahan.");
-        setLoading(false);
-        return;
-      }
-
+      if (!res.ok) { setError(data.error || "Terjadi kesalahan."); setLoading(false); return; }
       if (data.success) {
         setSuccess(data.message);
-        setTimeout(() => {
-          router.push("/portal/troubleshoot");
-          router.refresh();
-        }, 1000);
+        setTimeout(() => { router.push("/portal/troubleshoot"); router.refresh(); }, 1000);
         return;
       }
-    } catch {
-      setError("Gagal terhubung ke server. Coba lagi.");
-    }
-
+    } catch { setError("Gagal terhubung ke server. Coba lagi."); }
     setLoading(false);
   }
 
-  // User already has access — Premium Dashboard
   if (hasAccess) {
     return (
-      <div className="max-w-3xl mx-auto py-4 animate-fade-in">
+      <div style={{ maxWidth: 720, margin: "0 auto", padding: "20px 0", animation: "gx-fade-up 0.6s ease both" }}>
         {/* Welcome Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-accent">Premium Aktif</span>
-          </div>
-          <h1 className="text-2xl font-bold text-text-primary mb-1">
+        <div style={{ marginBottom: 48 }}>
+          <p style={{ fontFamily: gxMono, fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase" as const, color: gxMuted, marginBottom: 12 }}>
+            ● PREMIUM AKTIF
+          </p>
+          <h1 style={{ fontFamily: gxSerif, fontSize: "clamp(1.5rem, 3vw, 2.25rem)", fontWeight: 400, fontStyle: "italic", color: "#e8e6e1", letterSpacing: "-0.01em", marginBottom: 8, lineHeight: 1.2 }}>
             Selamat Datang di Mediea Solution
           </h1>
-          <p className="text-sm text-text-secondary leading-relaxed">
+          <p style={{ fontSize: 14, color: gxMuted, lineHeight: 1.7 }}>
             Platform pemulihan akun media sosial dengan panduan langkah demi langkah.
           </p>
         </div>
 
-        {/* Dashboard Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+        {/* Stats Grid - cross style */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1px", background: gxBorder, border: `1px solid ${gxBorder}`, marginBottom: 48 }}>
           {[
-            { label: "Platform", value: "8+", icon: IconGrid, color: "#10b981" },
-            { label: "Solusi", value: "200+", icon: IconBook, color: "#3b82f6" },
-            { label: "Template", value: "50+", icon: IconDocument, color: "#f59e0b" },
-            { label: "Video", value: "30+", icon: IconVideo, color: "#ef4444" },
-          ].map((stat) => {
-            const Icon = stat.icon;
-            return (
-              <div key={stat.label} className="dash-stat">
-                <div className="flex items-center gap-2 mb-2">
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ backgroundColor: `${stat.color}15`, color: stat.color }}
-                  >
-                    <Icon className="w-4 h-4" color={stat.color} />
-                  </div>
-                </div>
-                <p className="text-xl font-bold text-text-primary" style={{ color: stat.color }}>{stat.value}</p>
-                <p className="text-[11px] text-text-tertiary mt-0.5">{stat.label}</p>
-              </div>
-            );
-          })}
+            { value: "8+", label: "PLATFORM" },
+            { value: "200+", label: "SOLUSI" },
+            { value: "50+", label: "TEMPLATE" },
+            { value: "30+", label: "VIDEO" },
+          ].map((s) => (
+            <div key={s.label} style={{ background: gxDark, padding: "28px 20px", textAlign: "center" as const }}>
+              <p style={{ fontFamily: gxSerif, fontSize: "clamp(1.5rem, 3vw, 2rem)", fontStyle: "italic", color: "#e8e6e1", marginBottom: 6 }}>{s.value}</p>
+              <p style={{ fontFamily: gxMono, fontSize: 9, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: gxMuted }}>{s.label}</p>
+            </div>
+          ))}
         </div>
 
         {/* Quick Actions */}
-        <div className="mb-6">
-          <p className="text-xs font-semibold text-text-tertiary uppercase tracking-wider mb-3">
-            Aksi Cepat
+        <div style={{ marginBottom: 48 }}>
+          <p style={{ fontFamily: gxMono, fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: gxMuted, marginBottom: 20 }}>
+            AKSI CEPAT
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <Link href="/portal/troubleshoot" className="quick-action group">
-              <div className="quick-action-icon bg-accent/10 text-accent">
-                <IconShieldCheck className="w-5 h-5" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-text-primary">Mulai Pemulihan Akun</p>
-                <p className="text-xs text-text-tertiary">Pilih platform dan ikuti panduan</p>
-              </div>
-              <IconChevronRight className="w-4 h-4 text-text-tertiary opacity-0 group-hover:opacity-100 transition-opacity" />
-            </Link>
-
-            <Link href="/portal/articles" className="quick-action group">
-              <div className="quick-action-icon bg-info/10 text-info">
-                <IconArticle className="w-5 h-5" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-text-primary">Baca Artikel</p>
-                <p className="text-xs text-text-tertiary">Tips keamanan akun digital</p>
-              </div>
-              <IconChevronRight className="w-4 h-4 text-text-tertiary opacity-0 group-hover:opacity-100 transition-opacity" />
-            </Link>
-
-            <Link href="/portal/support" className="quick-action group">
-              <div className="quick-action-icon bg-warning/10 text-warning">
-                <IconChat className="w-5 h-5" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-text-primary">Hubungi Support</p>
-                <p className="text-xs text-text-tertiary">Butuh bantuan? Chat kami</p>
-              </div>
-              <IconChevronRight className="w-4 h-4 text-text-tertiary opacity-0 group-hover:opacity-100 transition-opacity" />
-            </Link>
-
-            <Link href="/portal/modules" className="quick-action group">
-              <div className="quick-action-icon bg-secondary/10 text-secondary">
-                <IconGraduation className="w-5 h-5" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-text-primary">Learning Modules</p>
-                <p className="text-xs text-text-tertiary">Pelajari keamanan digital</p>
-              </div>
-              <IconChevronRight className="w-4 h-4 text-text-tertiary opacity-0 group-hover:opacity-100 transition-opacity" />
-            </Link>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: gxBorder }}>
+            {[
+              { label: "Mulai Pemulihan Akun", desc: "Pilih platform dan ikuti panduan", href: "/portal/troubleshoot", num: "01" },
+              { label: "Baca Artikel", desc: "Tips keamanan akun digital", href: "/portal/articles", num: "02" },
+              { label: "Hubungi Support", desc: "Butuh bantuan? Chat kami", href: "/portal/support", num: "03" },
+              { label: "Learning Modules", desc: "Pelajari keamanan digital", href: "/portal/modules", num: "04" },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                style={{ background: gxDark, padding: "24px 20px", textDecoration: "none", display: "block", transition: "background 0.3s ease" }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "#141414")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = gxDark)}
+              >
+                <span style={{ fontFamily: gxMono, fontSize: 9, color: "rgba(122,122,114,0.5)", display: "block", marginBottom: 8 }}>{item.num}</span>
+                <p style={{ fontSize: 13, fontWeight: 500, color: "#e8e6e1", marginBottom: 4, letterSpacing: "0.03em", textTransform: "uppercase" as const }}>{item.label}</p>
+                <p style={{ fontSize: 12, color: gxMuted }}>{item.desc}</p>
+              </Link>
+            ))}
           </div>
         </div>
 
         {/* CTA */}
-        <div className="p-5 rounded-xl border border-accent/20 bg-accent/[0.03]">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-9 h-9 rounded-lg bg-accent/10 flex items-center justify-center">
-              <IconVerified className="w-[18px] h-[18px] text-accent" />
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-text-primary">Akses Premium Aktif</p>
-              <p className="text-xs text-text-tertiary">Anda sudah memiliki akses ke semua panduan pemulihan.</p>
-            </div>
-          </div>
+        <div style={{ padding: "28px 24px", border: `1px solid ${gxBorder}` }}>
+          <p style={{ fontFamily: gxMono, fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: gxMuted, marginBottom: 6 }}>● AKSES PREMIUM AKTIF</p>
+          <p style={{ fontSize: 13, color: gxMuted, marginBottom: 20 }}>Anda sudah memiliki akses ke semua panduan pemulihan.</p>
           <button
             onClick={() => router.push("/portal/troubleshoot")}
-            className="btn-primary w-full py-3 text-sm font-medium"
+            style={{
+              width: "100%", padding: "14px 0", background: "#1a1a1a", color: "#e8e6e1", border: `1px solid ${gxBorder}`,
+              fontSize: 11, fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase" as const, cursor: "pointer",
+              transition: "all 0.3s ease", fontFamily: "inherit"
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "#222")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "#1a1a1a")}
           >
-            <IconBolt className="w-4 h-4" />
-            Mulai Pemulihan Akun
+            MULAI PEMULIHAN AKUN →
           </button>
         </div>
       </div>
@@ -191,141 +123,80 @@ export function PortalWelcome({ hasAccess }: { hasAccess: boolean }) {
 
   // No access — code entry
   return (
-    <div className="max-w-2xl mx-auto py-4">
-      <div className="mb-10">
-        <h1 className="text-2xl font-bold text-text-primary mb-2">
+    <div style={{ maxWidth: 600, margin: "0 auto", padding: "20px 0" }}>
+      <div style={{ marginBottom: 48 }}>
+        <h1 style={{ fontFamily: gxSerif, fontSize: "clamp(1.5rem, 3vw, 2.25rem)", fontWeight: 400, fontStyle: "italic", color: "#e8e6e1", letterSpacing: "-0.01em", marginBottom: 12, lineHeight: 1.2 }}>
           Pemulihan Akun
         </h1>
-        <p className="text-sm text-text-secondary leading-relaxed">
-          Panduan langkah demi langkah untuk memulihkan akun media sosial Anda
-          dengan template siap pakai dan tautan ke formulir resmi platform.
+        <p style={{ fontSize: 14, color: gxMuted, lineHeight: 1.7 }}>
+          Panduan langkah demi langkah untuk memulihkan akun media sosial Anda dengan template siap pakai dan tautan ke formulir resmi platform.
         </p>
       </div>
 
-      <Steps />
-
-      {/* Code Entry */}
-      <div className="mt-8">
-        <div className="p-5 rounded-xl border border-border-default bg-bg-secondary">
-          <h2 className="text-sm font-semibold text-text-primary mb-1">Masukkan Kode Akses</h2>
-          <p className="text-xs text-text-tertiary mb-4">
-            Kode diberikan oleh admin untuk membuka panduan pemulihan premium.
-          </p>
-
-          <form onSubmit={handleSubmit} className="space-y-3">
-            {error && (
-              <div className="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-danger/5 border border-danger/15 text-sm text-danger">
-                <IconAlertCircle className="w-4 h-4 shrink-0" />
-                {error}
-              </div>
-            )}
-
-            {success && (
-              <div className="flex items-center gap-2 px-3 py-2.5 rounded-lg bg-accent/5 border border-accent/15 text-sm text-accent font-medium">
-                <IconSpinner className="w-4 h-4 shrink-0" />
-                {success}
-              </div>
-            )}
-
-            <input
-              type="text"
-              value={code}
-              onChange={(e) => {
-                setCode(e.target.value.toUpperCase());
-                if (error) setError("");
-              }}
-              placeholder="MASUKKAN KODE"
-              className="input text-center tracking-[0.12em] font-mono py-3 text-sm uppercase"
-              maxLength={20}
-              autoComplete="off"
-              disabled={loading || !!success}
-            />
-
-            <button
-              type="submit"
-              disabled={!code.trim() || loading || !!success}
-              className="btn-primary w-full py-3 text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              {loading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <IconSpinner className="w-4 h-4" />
-                  Memvalidasi...
-                </span>
-              ) : success ? (
-                "Berhasil"
-              ) : (
-                "Aktifkan Kode"
-              )}
-            </button>
-          </form>
-
-          <p className="text-[11px] text-text-tertiary text-center mt-3">
-            Setiap kode hanya berlaku 1x pakai. Hubungi admin jika belum punya kode.
-          </p>
-        </div>
-      </div>
-
-      {/* Locked Preview */}
-      <LockedPreview />
-    </div>
-  );
-}
-
-/* ——— Steps ——— */
-function Steps() {
-  const steps = [
-    { num: "1", title: "Masukkan Kode", desc: "Gunakan kode unik dari admin", icon: IconKey },
-    { num: "2", title: "Pilih Platform", desc: "Facebook, Instagram, TikTok, dll", icon: IconCompass },
-    { num: "3", title: "Pilih Kendala", desc: "Diretas, diblokir, atau terkunci", icon: IconWrench },
-    { num: "4", title: "Ikuti Solusi", desc: "Panduan + template siap pakai", icon: IconCheckCircle },
-  ];
-
-  return (
-    <div>
-      <p className="text-xs font-medium text-text-tertiary uppercase tracking-wider mb-3">
-        Cara Kerja
-      </p>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {steps.map((s) => {
-          const Icon = s.icon;
-          return (
-            <div key={s.num} className="p-3.5 rounded-xl border border-border-subtle bg-bg-secondary/60">
-              <div className="flex items-center gap-2 mb-1.5">
-                <span className="w-5 h-5 rounded-md bg-accent/10 text-accent text-[10px] font-bold flex items-center justify-center">
-                  {s.num}
-                </span>
-                <span className="text-xs font-semibold text-text-primary">{s.title}</span>
-              </div>
-              <div className="flex items-center gap-1.5 mt-1">
-                <Icon className="w-3 h-3 text-text-tertiary" />
-                <p className="text-[11px] text-text-tertiary leading-relaxed">{s.desc}</p>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-/* ——— Locked Preview ——— */
-function LockedPreview() {
-  return (
-    <div className="mt-8 relative overflow-hidden rounded-xl border border-border-subtle">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-bg-primary/70 to-bg-primary z-10 flex items-end justify-center pb-6">
-        <div className="text-center">
-          <IconLock className="w-8 h-8 text-text-tertiary mx-auto mb-1.5 opacity-40" />
-          <p className="text-xs text-text-tertiary">Masukkan kode untuk membuka</p>
-        </div>
-      </div>
-      <div className="opacity-[0.06] pointer-events-none p-4">
-        <div className="grid grid-cols-3 gap-2">
-          {["Facebook", "Instagram", "TikTok", "YouTube", "WhatsApp", "Twitter"].map((n) => (
-            <div key={n} className="px-4 py-3 rounded-lg border border-border-default bg-bg-secondary">
-              <span className="text-sm text-text-primary">{n}</span>
+      {/* Steps */}
+      <div style={{ marginBottom: 40 }}>
+        <p style={{ fontFamily: gxMono, fontSize: 10, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: gxMuted, marginBottom: 16 }}>CARA KERJA</p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: gxBorder }}>
+          {[
+            { num: "01", title: "Masukkan Kode", desc: "Gunakan kode unik dari admin" },
+            { num: "02", title: "Pilih Platform", desc: "Facebook, Instagram, TikTok, dll" },
+            { num: "03", title: "Pilih Kendala", desc: "Diretas, diblokir, atau terkunci" },
+            { num: "04", title: "Ikuti Solusi", desc: "Panduan + template siap pakai" },
+          ].map((s) => (
+            <div key={s.num} style={{ background: gxDark, padding: "20px 16px" }}>
+              <span style={{ fontFamily: gxMono, fontSize: 9, color: "rgba(122,122,114,0.5)", display: "block", marginBottom: 8 }}>{s.num}</span>
+              <p style={{ fontSize: 12, fontWeight: 500, color: "#e8e6e1", marginBottom: 4, letterSpacing: "0.03em", textTransform: "uppercase" as const }}>{s.title}</p>
+              <p style={{ fontSize: 11, color: gxMuted }}>{s.desc}</p>
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Code Entry */}
+      <div style={{ padding: "28px 24px", border: `1px solid ${gxBorder}` }}>
+        <h2 style={{ fontSize: 13, fontWeight: 500, color: "#e8e6e1", letterSpacing: "0.05em", textTransform: "uppercase" as const, marginBottom: 4 }}>Masukkan Kode Akses</h2>
+        <p style={{ fontSize: 12, color: gxMuted, marginBottom: 20 }}>Kode diberikan oleh admin untuk membuka panduan pemulihan premium.</p>
+
+        <form onSubmit={handleSubmit}>
+          {error && (
+            <div style={{ padding: "10px 14px", marginBottom: 12, fontSize: 12, color: "#ef4444", border: "1px solid rgba(239,68,68,0.2)", background: "rgba(239,68,68,0.05)" }}>
+              {error}
+            </div>
+          )}
+          {success && (
+            <div style={{ padding: "10px 14px", marginBottom: 12, fontSize: 12, color: "#22c55e", border: "1px solid rgba(34,197,94,0.2)", background: "rgba(34,197,94,0.05)" }}>
+              {success}
+            </div>
+          )}
+          <input
+            type="text"
+            value={code}
+            onChange={(e) => { setCode(e.target.value.toUpperCase()); if (error) setError(""); }}
+            placeholder="MASUKKAN KODE"
+            maxLength={20}
+            autoComplete="off"
+            disabled={loading || !!success}
+            style={{
+              width: "100%", padding: "12px 16px", background: "rgba(255,255,255,0.03)", border: `1px solid ${gxBorder}`,
+              color: "#e8e6e1", fontSize: 13, letterSpacing: "0.1em", textAlign: "center" as const,
+              fontFamily: gxMono, marginBottom: 12, outline: "none", boxSizing: "border-box" as const
+            }}
+          />
+          <button
+            type="submit"
+            disabled={!code.trim() || loading || !!success}
+            style={{
+              width: "100%", padding: "14px 0", background: "#1a1a1a", color: "#e8e6e1", border: `1px solid ${gxBorder}`,
+              fontSize: 11, fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase" as const, cursor: "pointer",
+              opacity: (!code.trim() || loading || !!success) ? 0.4 : 1, fontFamily: "inherit"
+            }}
+          >
+            {loading ? "MEMVALIDASI..." : success ? "BERHASIL" : "AKTIFKAN KODE"}
+          </button>
+          <p style={{ fontSize: 10, color: gxMuted, textAlign: "center" as const, marginTop: 12 }}>
+            Setiap kode hanya berlaku 1x pakai. Hubungi admin jika belum punya kode.
+          </p>
+        </form>
       </div>
     </div>
   );

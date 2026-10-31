@@ -300,11 +300,7 @@ function LandingPageInner() {
             </div>
             <div className="gx-service-visual">
               <div className="gx-service-image">
-                {i === 0 ? (
-                  <img src="/service-image.jpg" alt={t(step.titleKey)} className="gx-service-img" />
-                ) : (
-                  <span className="gx-service-step-num">{String(i + 1).padStart(2, "0")}</span>
-                )}
+                <span className="gx-service-step-num">{String(i + 1).padStart(2, "0")}</span>
               </div>
             </div>
           </div>
