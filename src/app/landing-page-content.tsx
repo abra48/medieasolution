@@ -84,73 +84,43 @@ const PLATFORM_ICONS = [
   },
 ];
 
-/* ——— Step Icons (static) ——— */
-const STEP_ICONS = [
-  <svg key="s1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
-  </svg>,
-  <svg key="s2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
-  </svg>,
-  <svg key="s3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-  </svg>,
-  <svg key="s4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
-  </svg>,
+/* ——— Marquee Keywords ——— */
+const MARQUEE_KEYWORDS = [
+  { text: "ACCOUNT RECOVERY", separator: "×" },
+  { text: "MULTI-PLATFORM", separator: "→" },
+  { text: "EXPERT GUIDES", separator: "→" },
+  { text: "TEMPLATE READY", separator: "★" },
+  { text: "INSTANT ACCESS", separator: "×" },
+  { text: "SOCIAL MEDIA", separator: "→" },
+  { text: "STEP BY STEP", separator: "×" },
+  { text: "SECURE & PRIVATE", separator: "→" },
 ];
 
-/* ——— Feature Icons (static) ——— */
-const FEATURE_ICONS = [
-  <svg key="f1" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342" />
-  </svg>,
-  <svg key="f2" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
-  </svg>,
-  <svg key="f3" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-  </svg>,
-  <svg key="f4" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-  </svg>,
-  <svg key="f5" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-    <path strokeLinecap="round" strokeLinejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
-  </svg>,
-  <svg key="f6" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-  </svg>,
-];
-
-/* ——— Stat Icons (static) ——— */
-const STAT_ICONS = [
-  <svg key="st1" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
-  </svg>,
-  <svg key="st2" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
-  </svg>,
-  <svg key="st3" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
-  </svg>,
-  <svg key="st4" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
-  </svg>,
-];
-
+/* ——— Stat Data ——— */
 const STAT_DATA = [
-  { target: 500, suffix: "+" },
-  { target: 8, suffix: "+" },
-  { target: 200, suffix: "+" },
-  { target: 99, suffix: "%" },
+  { target: 500, suffix: "+", labelKey: "stats.recovered" },
+  { target: 8, suffix: "+", labelKey: "stats.platforms" },
+  { target: 200, suffix: "+", labelKey: "stats.solutions" },
+  { target: 99, suffix: "%", labelKey: "stats.successRate" },
 ];
 
-const STAT_LABEL_KEYS = [
-  "stats.recovered",
-  "stats.platforms",
-  "stats.solutions",
-  "stats.successRate",
+/* ——— Feature/Service Data ——— */
+const SERVICE_TAGS_KEYS = [
+  ["feature1.title", "feature2.title"],
+  ["feature3.title", "feature4.title"],
+  ["feature5.title", "feature6.title"],
+];
+
+const SERVICE_DESC_KEYS = [
+  "feature1.desc",
+  "feature3.desc",
+  "feature5.desc",
+];
+
+const SERVICE_TITLE_KEYS = [
+  "feature1.title",
+  "feature3.title",
+  "feature5.title",
 ];
 
 const TESTIMONIAL_META = [
@@ -163,27 +133,26 @@ const TESTIMONIAL_META = [
 ];
 
 /* ================================================================
-   LANDING PAGE CONTENT — with i18n
+   LANDING PAGE CONTENT — Gerti/x Inspired Design
    ================================================================ */
 
 function LandingPageInner() {
   const { t } = useI18n();
 
-  /* Build translated data */
   const steps = [
-    { titleKey: "step1.title", descKey: "step1.desc", icon: STEP_ICONS[0] },
-    { titleKey: "step2.title", descKey: "step2.desc", icon: STEP_ICONS[1] },
-    { titleKey: "step3.title", descKey: "step3.desc", icon: STEP_ICONS[2] },
-    { titleKey: "step4.title", descKey: "step4.desc", icon: STEP_ICONS[3] },
+    { titleKey: "step1.title", descKey: "step1.desc" },
+    { titleKey: "step2.title", descKey: "step2.desc" },
+    { titleKey: "step3.title", descKey: "step3.desc" },
+    { titleKey: "step4.title", descKey: "step4.desc" },
   ];
 
   const features = [
-    { titleKey: "feature1.title", descKey: "feature1.desc", icon: FEATURE_ICONS[0] },
-    { titleKey: "feature2.title", descKey: "feature2.desc", icon: FEATURE_ICONS[1] },
-    { titleKey: "feature3.title", descKey: "feature3.desc", icon: FEATURE_ICONS[2] },
-    { titleKey: "feature4.title", descKey: "feature4.desc", icon: FEATURE_ICONS[3] },
-    { titleKey: "feature5.title", descKey: "feature5.desc", icon: FEATURE_ICONS[4] },
-    { titleKey: "feature6.title", descKey: "feature6.desc", icon: FEATURE_ICONS[5] },
+    { titleKey: "feature1.title", descKey: "feature1.desc" },
+    { titleKey: "feature2.title", descKey: "feature2.desc" },
+    { titleKey: "feature3.title", descKey: "feature3.desc" },
+    { titleKey: "feature4.title", descKey: "feature4.desc" },
+    { titleKey: "feature5.title", descKey: "feature5.desc" },
+    { titleKey: "feature6.title", descKey: "feature6.desc" },
   ];
 
   const testimonials = TESTIMONIAL_META.map((meta, i) => ({
@@ -201,239 +170,202 @@ function LandingPageInner() {
   ];
 
   return (
-    <div className="landing min-h-screen">
+    <div className="gx-page">
       <LandingAnimations />
 
       {/* ——— Nav ——— */}
-      <nav className="fixed top-0 left-0 right-0 z-50 landing-nav" data-landing-nav>
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 sm:gap-2.5 group">
-            <img src="https://i.ibb.co.com/qY3R33DK/Gemini-Generated-Image-xmtysbxmtysbxmty.png" alt="Mediea Solution" className="w-8 h-8 rounded-full object-cover transition-transform duration-500 group-hover:scale-110" />
-            <span className="text-sm font-semibold tracking-tight l-text nav-logo-text">
-              Mediea<span className="landing-gradient-text">Solution</span>
-            </span>
+      <nav className="gx-nav" data-landing-nav>
+        <div className="gx-nav-inner">
+          <Link href="/" className="gx-nav-logo">
+            mediea<span>/</span>solution
           </Link>
-          <div className="flex items-center gap-3 sm:gap-6">
-            <a href="#how-it-works" className="hidden sm:block text-sm landing-link-muted">
-              {t("nav.howItWorks")}
+          <div className="gx-nav-menu">
+            <a href="#hero" className="gx-nav-item">
+              <span className="gx-nav-num">01</span> HOME
             </a>
-            <a href="#testimonials" className="hidden sm:block text-sm landing-link-muted">
-              {t("nav.testimonials")}
+            <a href="#how-it-works" className="gx-nav-item">
+              <span className="gx-nav-num">02</span> {t("nav.howItWorks").toUpperCase()}
             </a>
-            <Link href="/login" className="hidden sm:block text-sm landing-link-muted">
-              {t("nav.login")}
-            </Link>
+            <a href="#testimonials" className="gx-nav-item">
+              <span className="gx-nav-num">03</span> {t("nav.testimonials").toUpperCase()}
+            </a>
+            <a href="#access" className="gx-nav-item">
+              <span className="gx-nav-num">04</span> CONTACT
+            </a>
+          </div>
+          <div className="gx-nav-actions">
             <LanguageSwitcher />
             <ThemeToggle />
-            <Link href="/register" className="landing-btn !py-2 !px-5 !text-xs !rounded-full">
-              {t("nav.register")}
-            </Link>
           </div>
         </div>
       </nav>
 
       {/* ——— Hero ——— */}
-      <section className="relative flex flex-col items-center justify-center px-4 sm:px-8 pt-32 sm:pt-40 pb-16 sm:pb-24">
-        {/* Bottom border */}
-        <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: 'var(--l-border)' }} />
-
-        <div className="max-w-3xl mx-auto text-center">
-          {/* Badge */}
-          <div className="hero-animate hero-animate-1 inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-8 landing-badge">
-            <div className="w-1.5 h-1.5 rounded-full bg-[var(--l-accent)] dot-pulse" />
-            <span className="text-[11px] font-semibold uppercase tracking-[0.12em] l-text-accent">
-              {t("hero.badge")}
-            </span>
+      <section id="hero" className="gx-hero">
+        <div className="gx-hero-overlay" />
+        <div className="gx-hero-content">
+          <div className="gx-hero-text">
+            <h1 className="gx-hero-title gx-hero-animate-1">
+              {t("hero.title1")}
+              <em>{t("hero.titleHighlight")}</em>
+              {t("hero.title2")}
+            </h1>
+            <p className="gx-hero-subtitle gx-hero-animate-2">
+              {t("hero.subtitle")}
+            </p>
+            <div className="gx-hero-cta-group gx-hero-animate-3">
+              <a href="#access" className="gx-btn-dark">
+                {t("hero.cta")}
+              </a>
+              <a href="#access" className="gx-btn-arrow" aria-label="Go">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </a>
+            </div>
           </div>
-
-          {/* Headline */}
-          <h1 className="hero-animate hero-animate-2 hero-title text-3xl sm:text-5xl md:text-[3.5rem] lg:text-[4rem] font-semibold leading-[1.05] tracking-[-0.035em] mb-5 sm:mb-6 text-balance">
-            <span className="l-text">{t("hero.title1")}</span>
-            <span className="l-text-accent">{t("hero.titleHighlight")}</span>
-            <span className="l-text">{t("hero.title2")}</span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="hero-animate hero-animate-3 hero-subtitle max-w-[38ch] mx-auto text-base leading-relaxed mb-8 sm:mb-10 l-text-secondary text-pretty">
-            {t("hero.subtitle")}
-          </p>
-
-          {/* CTA */}
-          <div className="hero-animate hero-animate-4 flex flex-wrap items-center justify-center gap-3">
-            <a href="#access" className="landing-btn">
-              {t("hero.cta")}
-            </a>
-            <a href="#how-it-works" className="landing-btn-outline">
-              {t("hero.secondary")}
-            </a>
-          </div>
-
-          {/* Social proof line */}
-          <p className="hero-animate hero-animate-5 mt-6 text-sm l-text-muted">
-            <span className="font-medium l-text-secondary">500+</span> {t("hero.usersHelped")}
-          </p>
-        </div>
-
-
-      </section>
-
-      {/* ——— Platforms Marquee ——— */}
-      <section className="py-8 sm:py-12 border-t border-b l-border-light overflow-hidden">
-        <div data-reveal="fade" data-reveal-delay="0">
-          <p className="text-center text-[10px] sm:text-[11px] uppercase tracking-[0.2em] mb-6 sm:mb-8 l-text-muted">
-            {t("platforms.label")}
-          </p>
-          <div className="relative overflow-hidden">
-            <div className="marquee-track">
-              {[...PLATFORM_ICONS, ...PLATFORM_ICONS].map((platform, i) => (
-                <div key={`${platform.name}-${i}`} className="marquee-item-premium mx-2">
-                  <span className="opacity-80">{platform.icon}</span>
-                  <span className="marquee-name text-base sm:text-xl font-light whitespace-nowrap l-text">
-                    {platform.name}
-                  </span>
-                </div>
-              ))}
+          <div className="gx-hero-visual gx-hero-animate-4">
+            <div className="gx-hero-image-wrapper">
+              <div className="gx-hero-glitch" />
             </div>
           </div>
         </div>
+
+        {/* Marquee */}
+        <div className="gx-marquee">
+          <div className="gx-marquee-track">
+            {[...MARQUEE_KEYWORDS, ...MARQUEE_KEYWORDS, ...MARQUEE_KEYWORDS].map((item, i) => (
+              <span key={i} className="gx-marquee-item">
+                <span className="gx-marquee-text">{item.text}</span>
+                <span className="gx-marquee-sep">{item.separator}</span>
+              </span>
+            ))}
+          </div>
+        </div>
       </section>
 
-      {/* ——— Stats Section ——— */}
-      <section className="py-16 sm:py-24 px-4 sm:px-8">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4" data-reveal data-reveal-delay="0">
-            {STAT_DATA.map((stat, i) => (
-              <div key={STAT_LABEL_KEYS[i]} className={`stat-card stagger-${i + 1}`} data-reveal data-reveal-delay={String(i * 100)}>
-                <div className="stat-icon">
-                  {STAT_ICONS[i]}
-                </div>
+      {/* ——— About / Description Section (White) ——— */}
+      <section className="gx-about" data-reveal>
+        <div className="gx-about-inner">
+          <p className="gx-about-text">
+            {t("hero.title1")}
+            <span className="gx-pill">{t("feature2.title")}</span>{" "}
+            {t("hero.subtitle").split(".")[0]}.{" "}
+            {t("why.title")}:{" "}
+            <span className="gx-pill">{t("feature1.title")}</span>,{" "}
+            <span className="gx-pill">{t("feature4.title")}</span>,{" "}
+            <span className="gx-pill">{t("feature5.title")}</span>,{" "}
+            <span className="gx-pill">{t("feature3.title")}</span>{" "}
+            &amp;{" "}
+            <span className="gx-pill">{t("feature6.title")}</span>.
+          </p>
+        </div>
+      </section>
+
+      {/* ——— Stats Section (Cross Grid) ——— */}
+      <section className="gx-stats" data-reveal>
+        <div className="gx-stats-grid">
+          {STAT_DATA.map((stat, i) => (
+            <div key={stat.labelKey} className="gx-stat-item" data-reveal data-reveal-delay={String(i * 100)}>
+              <div className="gx-stat-number">
                 <AnimatedCounter target={stat.target} suffix={stat.suffix} />
-                <p className="stat-label">{t(STAT_LABEL_KEYS[i])}</p>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ——— How It Works — Horizontal Stepper ——— */}
-      <section id="how-it-works" className="py-16 sm:py-24 md:py-32 px-4 sm:px-8">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12 sm:mb-20" data-reveal>
-            <p className="section-label justify-center mb-4">
-              {t("howItWorks.sectionLabel")}
-            </p>
-            <h2 className="section-title text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight l-text">
-              {t("howItWorks.title")}
-            </h2>
-            <p className="max-w-md mx-auto mt-4 text-sm sm:text-base l-text-secondary">
-              {t("howItWorks.subtitle")}
-            </p>
-          </div>
-
-          {/* Horizontal Stepper */}
-          <div className="stepper-container" data-reveal data-reveal-delay="100">
-            {/* Connecting line */}
-            <div className="stepper-line">
-              <div className="stepper-line-fill revealed" />
+              <p className="gx-stat-label">{t(stat.labelKey)}</p>
             </div>
-
-            {steps.map((step, i) => (
-              <div key={step.titleKey} className={`stepper-step ${i === 1 ? 'stepper-step-active' : ''}`}>
-                <div className="stepper-icon">
-                  {step.icon}
-                </div>
-                <div>
-                  <h3 className="stepper-title">{t(step.titleKey)}</h3>
-                  <p className="stepper-desc">{t(step.descKey)}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* Divider */}
-      <div className="landing-divider max-w-5xl mx-auto" />
+      {/* ——— How It Works ——— */}
+      <section id="how-it-works" className="gx-services">
+        <div className="gx-services-header" data-reveal>
+          <p className="gx-section-label">
+            {t("howItWorks.sectionLabel")}
+          </p>
+          <h2 className="gx-section-title">{t("howItWorks.title")}</h2>
+          <p className="gx-section-subtitle">{t("howItWorks.subtitle")}</p>
+        </div>
 
-      {/* ——— Features ——— */}
-      <section className="py-16 sm:py-24 md:py-32 px-4 sm:px-8">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12 sm:mb-16" data-reveal>
-            <p className="section-label justify-center mb-4">
-              {t("why.sectionLabel")}
-            </p>
-            <h2 className="section-title text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight l-text">
-              {t("why.title")}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-            {features.map((feature, i) => (
-              <div key={feature.titleKey} data-reveal data-reveal-delay={String(i * 80)}>
-                <div className="landing-card group cursor-default">
-                  <div className="landing-icon-box w-10 h-10 rounded-xl flex items-center justify-center mb-5">
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-sm sm:text-base font-semibold mb-2 l-text">
-                    {t(feature.titleKey)}
-                  </h3>
-                  <p className="text-xs sm:text-sm leading-relaxed l-text-secondary">
-                    {t(feature.descKey)}
-                  </p>
-                </div>
+        {steps.map((step, i) => (
+          <div
+            key={step.titleKey}
+            className={`gx-service ${i % 2 !== 0 ? "gx-service-reverse" : ""}`}
+            data-reveal={i % 2 === 0 ? "left" : "right"}
+            data-reveal-delay={String(i * 100)}
+          >
+            <div className="gx-service-info">
+              <span className="gx-service-number">{String(i + 1).padStart(2, "0")}</span>
+              <h3 className="gx-service-title">{t(step.titleKey)}</h3>
+              <p className="gx-service-desc">{t(step.descKey)}</p>
+            </div>
+            <div className="gx-service-visual">
+              <div className="gx-service-image">
+                <span className="gx-service-step-num">{String(i + 1).padStart(2, "0")}</span>
               </div>
-            ))}
+            </div>
           </div>
+        ))}
+      </section>
+
+      {/* ——— Features Grid ——— */}
+      <section className="gx-features-section">
+        <div className="gx-features-header" data-reveal>
+          <p className="gx-section-label">{t("why.sectionLabel")}</p>
+          <h2 className="gx-section-title">{t("why.title")}</h2>
+        </div>
+        <div className="gx-features-grid">
+          {features.map((feature, i) => (
+            <div key={feature.titleKey} className="gx-feature-card" data-reveal data-reveal-delay={String(i * 80)}>
+              <span className="gx-feature-num">{String(i + 1).padStart(2, "0")}</span>
+              <h3 className="gx-feature-title">{t(feature.titleKey)}</h3>
+              <p className="gx-feature-desc">{t(feature.descKey)}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Divider */}
-      <div className="landing-divider max-w-5xl mx-auto" />
+      {/* ——— Platforms ——— */}
+      <section className="gx-platforms" data-reveal>
+        <p className="gx-platforms-label">{t("platforms.label")}</p>
+        <div className="gx-platforms-grid">
+          {PLATFORM_ICONS.map((platform) => (
+            <div key={platform.name} className="gx-platform-item">
+              <span className="gx-platform-icon">{platform.icon}</span>
+              <span className="gx-platform-name">{platform.name}</span>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* ——— Testimonials ——— */}
-      <section id="testimonials" className="py-16 sm:py-24 md:py-32 px-4 sm:px-8 overflow-hidden">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12 sm:mb-16" data-reveal>
-            <p className="section-label justify-center mb-4">
-              {t("testimonials.sectionLabel")}
-            </p>
-            <h2 className="section-title text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight l-text">
-              {t("testimonials.title")}
-            </h2>
-            <p className="max-w-md mx-auto mt-4 text-sm sm:text-base l-text-secondary">
-              {t("testimonials.subtitle")}
-            </p>
-          </div>
+      <section id="testimonials" className="gx-testimonials-section">
+        <div className="gx-testimonials-header" data-reveal>
+          <p className="gx-section-label">{t("testimonials.sectionLabel")}</p>
+          <h2 className="gx-section-title">{t("testimonials.title")}</h2>
+          <p className="gx-section-subtitle">{t("testimonials.subtitle")}</p>
         </div>
 
-        {/* Testimonial Marquee */}
-        <div className="relative overflow-hidden" data-reveal data-reveal-delay="100">
-          <div className="testimonial-track">
+        <div className="gx-testimonials-track-wrapper" data-reveal data-reveal-delay="100">
+          <div className="gx-testimonials-track">
             {[...testimonials, ...testimonials].map((tItem, i) => (
-              <div key={`${tItem.name}-${i}`} className="testimonial-card w-[320px] sm:w-[360px] flex-shrink-0">
-                {/* Stars */}
-                <div className="testimonial-stars mb-3">
+              <div key={`${tItem.name}-${i}`} className="gx-testimonial-card">
+                <div className="gx-testimonial-stars">
                   {[...Array(5)].map((_, s) => (
                     <svg key={s} className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   ))}
                 </div>
-                {/* Text */}
-                <p className="text-sm l-text-secondary leading-relaxed mb-4">
+                <p className="gx-testimonial-text">
                   &ldquo;{tItem.text}&rdquo;
                 </p>
-                {/* Author */}
-                <div className="flex items-center gap-3">
-                  <div
-                    className="testimonial-avatar"
-                    style={{ background: tItem.bg }}
-                  >
+                <div className="gx-testimonial-author">
+                  <div className="gx-testimonial-avatar" style={{ background: tItem.bg }}>
                     {tItem.initials}
                   </div>
                   <div>
-                    <p className="text-sm font-semibold l-text">{tItem.name}</p>
-                    <p className="text-xs l-text-muted">{tItem.role}</p>
+                    <p className="gx-testimonial-name">{tItem.name}</p>
+                    <p className="gx-testimonial-role">{tItem.role}</p>
                   </div>
                 </div>
               </div>
@@ -442,42 +374,24 @@ function LandingPageInner() {
         </div>
       </section>
 
-      {/* Divider */}
-      <div className="landing-divider max-w-5xl mx-auto" />
-
       {/* ——— FAQ Section ——— */}
       <FAQSection />
 
-      {/* Divider */}
-      <div className="landing-divider max-w-5xl mx-auto" />
+      {/* ——— Access Code ——— */}
+      <section id="access" className="gx-access">
+        <div className="gx-access-inner" data-reveal>
+          <span className="gx-access-number">05</span>
+          <p className="gx-section-label">{t("access.sectionLabel")}</p>
+          <h2 className="gx-section-title">{t("access.title")}</h2>
+          <p className="gx-section-subtitle">{t("access.subtitle")}</p>
 
-      {/* ——— Access Code — Premium CTA ——— */}
-      <section id="access" className="py-16 sm:py-24 md:py-32 px-4 sm:px-8 access-section-bg">
-        <div className="max-w-md mx-auto text-center relative z-10" data-reveal>
-          <div className="landing-icon-box w-14 h-14 rounded-2xl mx-auto mb-6 flex items-center justify-center">
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
-            </svg>
-          </div>
-
-          <p className="section-label justify-center mb-3">
-            {t("access.sectionLabel")}
-          </p>
-          <h2 className="section-title text-xl sm:text-2xl md:text-3xl font-bold tracking-tight mb-3 l-text">
-            {t("access.title")}
-          </h2>
-          <p className="text-sm mb-8 l-text-secondary">
-            {t("access.subtitle")}
-          </p>
-
-          {/* Access code form */}
-          <div className="landing-form-wrapper">
+          <div className="gx-access-form">
             <LandingAccessCodeForm />
           </div>
 
-          <p className="text-xs mt-6 l-text-muted">
+          <p className="gx-access-help">
             {t("access.noCode")}{" "}
-            <Link href="/portal/support" className="l-text-accent transition-colors duration-300 hover:underline">
+            <Link href="/portal/support" className="gx-access-link">
               {t("access.contact")}
             </Link>{" "}
             {t("access.noCodeSuffix")}
@@ -486,36 +400,23 @@ function LandingPageInner() {
       </section>
 
       {/* ——— Footer ——— */}
-      <footer className="landing-footer">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-12 sm:py-16">
-          <div className="footer-grid grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12" data-reveal>
+      <footer className="gx-footer">
+        <div className="gx-footer-inner" data-reveal>
+          <div className="gx-footer-grid">
             {/* Brand */}
-            <div>
-              <div className="flex items-center gap-2.5 mb-4">
-                <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: 'var(--l-accent)' }}>
-                  <span className="text-white text-xs font-bold">M</span>
-                </div>
-                <span className="text-sm font-semibold tracking-tight l-text">
-                  Mediea<span className="landing-gradient-text">Solution</span>
-                </span>
-              </div>
-              <p className="text-sm leading-relaxed l-text-secondary">
-                {t("footer.tagline")}
-              </p>
+            <div className="gx-footer-brand">
+              <Link href="/" className="gx-footer-logo">
+                mediea<span>/</span>solution
+              </Link>
+              <p className="gx-footer-tagline">{t("footer.tagline")}</p>
             </div>
 
             {/* Links */}
-            <div>
-              <h4 className="text-xs font-semibold uppercase tracking-[0.15em] mb-4 l-text-muted">
-                {t("footer.nav")}
-              </h4>
-              <div className="space-y-3">
+            <div className="gx-footer-col">
+              <h4 className="gx-footer-heading">{t("footer.nav")}</h4>
+              <div className="gx-footer-links">
                 {footerLinks.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    className="block text-sm landing-link"
-                  >
+                  <a key={link.label} href={link.href} className="gx-footer-link">
                     {link.label}
                   </a>
                 ))}
@@ -523,49 +424,26 @@ function LandingPageInner() {
             </div>
 
             {/* Contact */}
-            <div>
-              <h4 className="text-xs font-semibold uppercase tracking-[0.15em] mb-4 l-text-muted">
-                {t("footer.contact")}
-              </h4>
-              <div className="space-y-3">
-                <a
-                  href="https://wa.me/6281241511156"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2.5 text-sm landing-link"
-                >
-                  <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
-                  </svg>
+            <div className="gx-footer-col">
+              <h4 className="gx-footer-heading">{t("footer.contact")}</h4>
+              <div className="gx-footer-links">
+                <a href="https://wa.me/6281241511156" target="_blank" rel="noopener noreferrer" className="gx-footer-link">
                   081241511156
                 </a>
-                <a
-                  href="https://mediea.co.id"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2.5 text-sm landing-link"
-                >
-                  <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
-                  </svg>
+                <a href="https://mediea.co.id" target="_blank" rel="noopener noreferrer" className="gx-footer-link">
                   mediea.co.id
                 </a>
               </div>
             </div>
           </div>
 
-          {/* Bottom bar */}
-          <div className="mt-8 sm:mt-12 pt-6 landing-footer-divider">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <p className="text-xs l-text-muted">
-                © {new Date().getFullYear()} Mediea Solution. All rights reserved.
-              </p>
-              <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#22c55e] dot-pulse" />
-                <span className="text-[10px] uppercase tracking-[0.15em] l-text-muted">
-                  {t("footer.systemActive")}
-                </span>
-              </div>
+          <div className="gx-footer-bottom">
+            <p className="gx-footer-copy">
+              &copy; {new Date().getFullYear()} Mediea Solution. All rights reserved.
+            </p>
+            <div className="gx-footer-status">
+              <span className="gx-status-dot" />
+              <span className="gx-status-text">{t("footer.systemActive")}</span>
             </div>
           </div>
         </div>
