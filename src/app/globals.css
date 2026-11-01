@@ -2366,6 +2366,40 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Light mode overrides for dark sections */
+.gx-page.gx-light {
+  --gx-dark: #f5f3ee;
+  --gx-dark2: #eae8e3;
+  --gx-text-light: #1a1a1a;
+  --gx-border-dark: rgba(0,0,0,0.1);
+}
+.gx-page.gx-light .gx-nav {
+  background: rgba(245,243,238,0.92);
+  border-bottom-color: rgba(0,0,0,0.08);
+}
+.gx-page.gx-light .gx-nav-logo,
+.gx-page.gx-light .gx-nav-item {
+  color: #1a1a1a;
+}
+.gx-page.gx-light .gx-nav-num { color: rgba(0,0,0,0.3); }
+.gx-page.gx-light .gx-hero { background: #f5f3ee; color: #1a1a1a; }
+.gx-page.gx-light .gx-hero-overlay {
+  background: linear-gradient(135deg, rgba(245,243,238,0.95) 0%, rgba(245,243,238,0.7) 50%, rgba(245,243,238,0.85) 100%);
+}
+.gx-page.gx-light .gx-hero-title { color: #1a1a1a; }
+.gx-page.gx-light .gx-hero-title em { color: #4a6a52; }
+.gx-page.gx-light .gx-hero-subtitle { color: rgba(26,26,26,0.6); }
+.gx-page.gx-light .gx-btn-dark { background: #1a1a1a; color: #f5f3ee; border-color: rgba(0,0,0,0.2); }
+.gx-page.gx-light .gx-btn-arrow { background: #1a1a1a; color: #f5f3ee; border-color: rgba(0,0,0,0.2); }
+.gx-page.gx-light .gx-marquee { border-top-color: rgba(0,0,0,0.08); }
+.gx-page.gx-light .gx-marquee-text { color: #1a1a1a; }
+.gx-page.gx-light .gx-marquee-sep { color: rgba(0,0,0,0.3); }
+.gx-page.gx-light .gx-features-section { background: #1a1f1e; color: #e8e6e3; }
+.gx-page.gx-light .gx-testimonials-section { background: #f5f3ee; }
+.gx-page.gx-light .gx-testimonial-card { background: #ffffff; border-color: rgba(0,0,0,0.08); }
+.gx-page.gx-light .gx-access { background: #1a1f1e; }
+.gx-page.gx-light .gx-footer { background: #0a0a0a; }
+
 /* ——— Nav ——— */
 .gx-nav {
   position: fixed;
