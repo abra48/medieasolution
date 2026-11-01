@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { ModulesHeader } from "@/components/portal-headers";
 
 export default async function ModulesPage() {
   const supabase = await createClient();
@@ -13,10 +14,7 @@ export default async function ModulesPage() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="text-xl font-bold text-text-primary mb-1">Learning Modules</h1>
-        <p className="text-sm text-text-tertiary">Educational materials for digital account security.</p>
-      </div>
+      <ModulesHeader />
 
       {!hasModules && (
         <div className="card text-center !py-10">

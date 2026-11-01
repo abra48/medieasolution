@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { isAdminRole } from "@/lib/admin-roles";
 import { TroubleshootFlow } from "@/components/troubleshoot/troubleshoot-flow";
+import { TroubleshootHeader } from "@/components/troubleshoot/troubleshoot-header";
 
 export default async function TroubleshootPage() {
   const supabase = await createClient();
@@ -29,12 +30,10 @@ export default async function TroubleshootPage() {
     hasAccess = !!activeCode;
   }
 
-  // If no access, redirect back to portal welcome page
   if (!hasAccess) {
     redirect("/portal");
   }
 
-  // Fetch platforms
   const { data: platforms } = await supabase
     .from("platforms")
     .select("id, name, icon_url, status")
@@ -43,15 +42,7 @@ export default async function TroubleshootPage() {
 
   return (
     <div className="max-w-3xl mx-auto py-4 min-h-[80vh]">
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-text-primary">Pemulihan Akun</h1>
-        <p className="text-sm text-text-tertiary mt-1">
-          Pilih platform, identifikasi kendala, dan ikuti panduan solusi.
-        </p>
-      </div>
-
-      {/* Troubleshoot Flow */}
+      <TroubleshootHeader />
       <TroubleshootFlow platforms={platforms || []} />
     </div>
   );

@@ -156,6 +156,74 @@ const dict: Record<Locale, Translations> = {
 
     "seo.title": "Mediea Solution — Pemulihan Akun Media Sosial",
     "seo.description": "Pulihkan akun media sosial yang diblokir, diretas, dan terkunci dengan panduan langkah demi langkah.",
+
+    /* ——— Portal ——— */
+    "portal.welcome": "Selamat Datang",
+    "portal.welcomeDesc": "Platform pemulihan akun media sosial dengan panduan langkah demi langkah.",
+    "portal.startRecovery": "Mulai Pemulihan",
+    "portal.startRecoveryDesc": "Pilih platform dan ikuti panduan pemulihan akun",
+    "portal.articles": "Artikel",
+    "portal.articlesDesc": "Tips dan panduan keamanan akun digital",
+    "portal.support": "Dukungan",
+    "portal.supportDesc": "Hubungi tim support kami",
+    "portal.modules": "Modul Belajar",
+    "portal.modulesDesc": "Pelajari keamanan digital secara mandiri",
+    "portal.codeTitle": "Pemulihan Akun",
+    "portal.codeDesc": "Masukkan kode akses untuk membuka panduan pemulihan premium.",
+    "portal.codePlaceholder": "MASUKKAN KODE",
+    "portal.codeSubmit": "AKTIFKAN KODE",
+    "portal.codeValidating": "MEMVALIDASI...",
+    "portal.codeSuccess": "BERHASIL",
+
+    /* ——— Portal Nav ——— */
+    "portal.nav.home": "Beranda",
+    "portal.nav.recovery": "Pemulihan",
+    "portal.nav.support": "Dukungan",
+    "portal.nav.articles": "Artikel",
+    "portal.nav.modules": "Modul",
+    "portal.nav.signout": "Sign out",
+
+    /* ——— Troubleshoot ——— */
+    "troubleshoot.title": "Pemulihan Akun",
+    "troubleshoot.subtitle": "Pilih platform, identifikasi kendala, dan ikuti panduan solusi.",
+    "troubleshoot.step1of3": "LANGKAH 1 DARI 3",
+    "troubleshoot.step2of3": "LANGKAH 2 DARI 3",
+    "troubleshoot.step3of3": "LANGKAH 3 DARI 3",
+    "troubleshoot.choosePlatform": "Pilih Platform",
+    "troubleshoot.choosePlatformDesc": "Pilih akun media sosial yang perlu dipulihkan.",
+    "troubleshoot.searchPlatform": "Cari platform...",
+    "troubleshoot.select": "Pilih",
+    "troubleshoot.notFound": "Tidak ditemukan",
+    "troubleshoot.chooseIssue": "Pilih Masalah",
+    "troubleshoot.chooseIssueDesc": "Pilih kendala yang Anda alami.",
+    "troubleshoot.searchIssue": "Cari kendala...",
+    "troubleshoot.solution": "Panduan Solusi",
+    "troubleshoot.step": "Langkah",
+    "troubleshoot.openAll": "Buka Semua",
+    "troubleshoot.closeAll": "Tutup Semua",
+    "troubleshoot.endGuide": "Akhir panduan",
+    "troubleshoot.openNewTab": "Buka di tab baru",
+    "troubleshoot.noSolution": "Belum ada solusi tersedia",
+    "troubleshoot.text": "Teks",
+    "troubleshoot.platform": "Platform",
+    "troubleshoot.issue": "Masalah",
+    "troubleshoot.back": "Kembali",
+
+    /* ——— Support ——— */
+    "support.title": "Support",
+    "support.subtitle": "Hubungi tim kami untuk bantuan pemulihan akun.",
+    "support.faq": "FAQ",
+
+    /* ——— Articles ——— */
+    "articles.title": "Pusat Informasi",
+    "articles.subtitle": "Artikel, panduan, dan layanan untuk pemulihan akun media sosial.",
+
+    /* ——— Modules ——— */
+    "modules.title": "Modul Belajar",
+    "modules.subtitle": "Materi edukasi untuk keamanan akun digital.",
+    "modules.comingSoon": "Segera Hadir",
+    "modules.inDevelopment": "Modul sedang dalam pengembangan",
+    "modules.comingSoonDesc": "Konten edukasi tentang keamanan digital, prosedur verifikasi, dan teknik pencegahan.",
   },
   en: {
     "nav.howItWorks": "How It Works",
@@ -304,6 +372,74 @@ const dict: Record<Locale, Translations> = {
 
     "seo.title": "Mediea Solution — Social Media Account Recovery",
     "seo.description": "Recover blocked, hacked, and locked-out social media accounts with step-by-step guided solutions.",
+
+    /* ——— Portal ——— */
+    "portal.welcome": "Welcome",
+    "portal.welcomeDesc": "Social media account recovery platform with step-by-step guides.",
+    "portal.startRecovery": "Start Recovery",
+    "portal.startRecoveryDesc": "Choose a platform and follow the account recovery guide",
+    "portal.articles": "Articles",
+    "portal.articlesDesc": "Tips and guides for digital account security",
+    "portal.support": "Support",
+    "portal.supportDesc": "Contact our support team",
+    "portal.modules": "Learning Modules",
+    "portal.modulesDesc": "Learn digital security independently",
+    "portal.codeTitle": "Account Recovery",
+    "portal.codeDesc": "Enter your access code to unlock premium recovery guides.",
+    "portal.codePlaceholder": "ENTER CODE",
+    "portal.codeSubmit": "ACTIVATE CODE",
+    "portal.codeValidating": "VALIDATING...",
+    "portal.codeSuccess": "SUCCESS",
+
+    /* ——— Portal Nav ——— */
+    "portal.nav.home": "Home",
+    "portal.nav.recovery": "Recovery",
+    "portal.nav.support": "Support",
+    "portal.nav.articles": "Articles",
+    "portal.nav.modules": "Modules",
+    "portal.nav.signout": "Sign out",
+
+    /* ——— Troubleshoot ——— */
+    "troubleshoot.title": "Account Recovery",
+    "troubleshoot.subtitle": "Choose a platform, identify the issue, and follow the solution guide.",
+    "troubleshoot.step1of3": "STEP 1 OF 3",
+    "troubleshoot.step2of3": "STEP 2 OF 3",
+    "troubleshoot.step3of3": "STEP 3 OF 3",
+    "troubleshoot.choosePlatform": "Choose Platform",
+    "troubleshoot.choosePlatformDesc": "Select the social media account that needs recovery.",
+    "troubleshoot.searchPlatform": "Search platform...",
+    "troubleshoot.select": "Select",
+    "troubleshoot.notFound": "Not found",
+    "troubleshoot.chooseIssue": "Choose Issue",
+    "troubleshoot.chooseIssueDesc": "Select the issue you are experiencing.",
+    "troubleshoot.searchIssue": "Search issue...",
+    "troubleshoot.solution": "Solution Guide",
+    "troubleshoot.step": "Step",
+    "troubleshoot.openAll": "Open All",
+    "troubleshoot.closeAll": "Close All",
+    "troubleshoot.endGuide": "End of guide",
+    "troubleshoot.openNewTab": "Open in new tab",
+    "troubleshoot.noSolution": "No solution available yet",
+    "troubleshoot.text": "Text",
+    "troubleshoot.platform": "Platform",
+    "troubleshoot.issue": "Issue",
+    "troubleshoot.back": "Back",
+
+    /* ——— Support ——— */
+    "support.title": "Support",
+    "support.subtitle": "Contact our team for account recovery assistance.",
+    "support.faq": "FAQ",
+
+    /* ——— Articles ——— */
+    "articles.title": "Information Center",
+    "articles.subtitle": "Articles, guides, and services for social media account recovery.",
+
+    /* ——— Modules ——— */
+    "modules.title": "Learning Modules",
+    "modules.subtitle": "Educational materials for digital account security.",
+    "modules.comingSoon": "Coming Soon",
+    "modules.inDevelopment": "Modules are in development",
+    "modules.comingSoonDesc": "Educational content covering digital security, verification procedures, and prevention techniques.",
   },
 };
 

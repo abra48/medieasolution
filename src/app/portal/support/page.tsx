@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { ContactHub } from "@/components/contact-hub";
+import { SupportHeader } from "@/components/portal-headers";
 
 export default async function SupportPage() {
   const supabase = await createClient();
@@ -25,10 +26,7 @@ export default async function SupportPage() {
 
   return (
     <div className="space-y-6 animate-fade-in">
-      <div>
-        <h1 className="text-xl font-bold text-text-primary mb-1">Support</h1>
-        <p className="text-sm text-text-tertiary">Contact our team for account recovery assistance.</p>
-      </div>
+      <SupportHeader />
 
       <ContactHub />
 

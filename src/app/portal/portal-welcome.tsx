@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useI18n } from "@/lib/i18n";
 
 export function PortalWelcome({ hasAccess }: { hasAccess: boolean }) {
   const router = useRouter();
+  const { t } = useI18n();
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -48,18 +50,18 @@ export function PortalWelcome({ hasAccess }: { hasAccess: boolean }) {
     return (
       <div style={{ maxWidth: 640, margin: "0 auto", paddingTop: 40 }}>
         <h1 style={{ fontFamily: s.serif, fontSize: "clamp(1.75rem, 4vw, 2.5rem)", fontWeight: 400, fontStyle: "italic", color: s.text, lineHeight: 1.15, marginBottom: 12 }}>
-          Selamat Datang
+          {t("portal.welcome")}
         </h1>
         <p style={{ fontSize: 14, color: s.muted, lineHeight: 1.7, marginBottom: 48, maxWidth: 400 }}>
-          Platform pemulihan akun media sosial dengan panduan langkah demi langkah.
+          {t("portal.welcomeDesc")}
         </p>
 
         <nav style={{ display: "flex", flexDirection: "column", gap: 0, borderTop: `1px solid ${s.border}` }}>
           {[
-            { label: "Mulai Pemulihan", desc: "Pilih platform dan ikuti panduan pemulihan akun", href: "/portal/troubleshoot" },
-            { label: "Artikel", desc: "Tips dan panduan keamanan akun digital", href: "/portal/articles" },
-            { label: "Dukungan", desc: "Hubungi tim support kami", href: "/portal/support" },
-            { label: "Modul Belajar", desc: "Pelajari keamanan digital secara mandiri", href: "/portal/modules" },
+            { label: t("portal.startRecovery"), desc: t("portal.startRecoveryDesc"), href: "/portal/troubleshoot" },
+            { label: t("portal.articles"), desc: t("portal.articlesDesc"), href: "/portal/articles" },
+            { label: t("portal.support"), desc: t("portal.supportDesc"), href: "/portal/support" },
+            { label: t("portal.modules"), desc: t("portal.modulesDesc"), href: "/portal/modules" },
           ].map((item, i) => (
             <Link
               key={item.href}
@@ -82,10 +84,10 @@ export function PortalWelcome({ hasAccess }: { hasAccess: boolean }) {
   return (
     <div style={{ maxWidth: 480, margin: "0 auto", paddingTop: 40 }}>
       <h1 style={{ fontFamily: s.serif, fontSize: "clamp(1.75rem, 4vw, 2.5rem)", fontWeight: 400, fontStyle: "italic", color: s.text, lineHeight: 1.15, marginBottom: 12 }}>
-        Pemulihan Akun
+        {t("portal.codeTitle")}
       </h1>
       <p style={{ fontSize: 14, color: s.muted, lineHeight: 1.7, marginBottom: 48, maxWidth: 360 }}>
-        Masukkan kode akses untuk membuka panduan pemulihan premium.
+        {t("portal.codeDesc")}
       </p>
 
       <form onSubmit={handleSubmit}>
@@ -95,7 +97,7 @@ export function PortalWelcome({ hasAccess }: { hasAccess: boolean }) {
           type="text"
           value={code}
           onChange={(e) => { setCode(e.target.value.toUpperCase()); if (error) setError(""); }}
-          placeholder="MASUKKAN KODE"
+          placeholder={t("portal.codePlaceholder")}
           maxLength={20}
           autoComplete="off"
           disabled={loading || !!success}
@@ -114,7 +116,7 @@ export function PortalWelcome({ hasAccess }: { hasAccess: boolean }) {
             opacity: (!code.trim() || loading || !!success) ? 0.4 : 1, fontFamily: "inherit"
           }}
         >
-          {loading ? "MEMVALIDASI..." : success ? "BERHASIL" : "AKTIFKAN KODE"}
+          {loading ? t("portal.codeValidating") : success ? t("portal.codeSuccess") : t("portal.codeSubmit")}
         </button>
       </form>
     </div>
