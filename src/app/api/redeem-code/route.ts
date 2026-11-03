@@ -84,7 +84,8 @@ export async function POST(request: NextRequest) {
       .select("id")
       .eq("used_by", user.id)
       .eq("is_used", true)
-      .single();
+      .limit(1)
+      .maybeSingle();
 
     if (existingCode) {
       return NextResponse.json({
@@ -119,11 +120,19 @@ export async function POST(request: NextRequest) {
     }
 
     // 4. Redeem the code — admin client bypasses RLS
-    const { error: updateError } = await adminClient
+    const { data: redeemed, error: updateError } = await adminClient
       .from("access_codes")
       .update({ is_used: true, used_by: user.id, used_at: new Date().toISOString() })
       .eq("id", accessCode.id)
-      .eq("is_used", false); // Extra safety
+      .eq("is_used", false) // Extra safety
+      .select("id");
+
+    if (!updateError && (!redeemed || redeemed.length === 0)) {
+      return NextResponse.json(
+        { error: "Kode akses sudah digunakan. Setiap kode hanya berlaku 1x pakai." },
+        { status: 409 }
+      );
+    }
 
     if (updateError) {
       console.error("Failed to redeem code:", updateError);

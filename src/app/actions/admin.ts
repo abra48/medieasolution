@@ -127,19 +127,28 @@ export async function createSolution(_: ActionResult, formData: FormData): Promi
     const content_type = formData.get("content_type") as string;
     const content_data = (formData.get("content_data") as string)?.trim();
     const method_group = (formData.get("method_group") as string)?.trim() || "Cara 1";
-    const button_label = (formData.get("button_label") as string)?.trim() || null;
-    const button_link = (formData.get("button_link") as string)?.trim() || null;
+
+    // Collect up to 3 buttons and merge with pipe separator
+    const btnLabels: string[] = [];
+    const btnLinks: string[] = [];
+    for (let i = 1; i <= 3; i++) {
+      const lbl = (formData.get(`button_label_${i}`) as string)?.trim();
+      const lnk = (formData.get(`button_link_${i}`) as string)?.trim();
+      if (lbl && lnk) {
+        btnLabels.push(lbl);
+        btnLinks.push(lnk);
+      } else if ((lbl && !lnk) || (!lbl && lnk)) {
+        return { error: `Button ${i}: Both label and URL must be filled, or both left empty.` };
+      }
+    }
+    const button_label = btnLabels.length > 0 ? btnLabels.join("|") : null;
+    const button_link = btnLinks.length > 0 ? btnLinks.join("|") : null;
 
     if (!platform_name) return { error: "Platform wajib dipilih." };
     if (!issue_id) return { error: "Kendala wajib dipilih." };
     if (!step_number || step_number < 1) return { error: "Nomor langkah tidak valid." };
     if (!content_type) return { error: "Tipe konten wajib dipilih." };
     if (!content_data) return { error: "Konten wajib diisi." };
-
-    // Validate: if one button field is set, both must be set
-    if ((button_label && !button_link) || (!button_label && button_link)) {
-      return { error: "Nama Tombol dan Tautan Tombol harus diisi keduanya, atau keduanya dikosongkan." };
-    }
 
     try {
       getPlatformSlug(platform_name);

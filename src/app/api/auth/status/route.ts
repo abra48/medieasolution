@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { hasPremiumAccess } from "@/lib/access";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -10,8 +11,9 @@ export async function GET() {
 
     return NextResponse.json({
       authenticated: !!user,
+      hasAccess: user ? await hasPremiumAccess(supabase, user.id) : false,
     });
   } catch {
-    return NextResponse.json({ authenticated: false });
+    return NextResponse.json({ authenticated: false, hasAccess: false });
   }
 }

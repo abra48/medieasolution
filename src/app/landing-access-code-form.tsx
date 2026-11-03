@@ -13,14 +13,16 @@ export function LandingAccessCodeForm() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null); // null = loading
+  const [hasAccess, setHasAccess] = useState(false);
 
   // Check auth status on mount
   useEffect(() => {
     async function checkAuth() {
       try {
-        const res = await fetch("/api/auth/status");
+        const res = await fetch("/api/auth/status", { cache: "no-store" });
         const data = await res.json();
         setIsLoggedIn(data.authenticated === true);
+        setHasAccess(data.hasAccess === true);
       } catch {
         setIsLoggedIn(false);
       }
@@ -97,6 +99,21 @@ export function LandingAccessCodeForm() {
             {t("access.createAccountBtn")}
           </a>
         </div>
+      </div>
+    );
+  }
+
+  // Logged in & code already redeemed — no need to enter a code again
+  if (hasAccess) {
+    return (
+      <div className="space-y-3">
+        <div className="flex items-center gap-2 px-4 py-3 rounded-lg bg-accent/10 border border-accent/20 text-left">
+          <div className="w-2 h-2 rounded-full bg-accent shrink-0" />
+          <span className="text-xs text-accent font-medium">{t("access.active")}</span>
+        </div>
+        <a href="/portal/troubleshoot" className="btn-accent-secondary w-full py-3 text-sm text-center block">
+          {t("access.openPortal")}
+        </a>
       </div>
     );
   }

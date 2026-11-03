@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { getSavedIsDark, applyTheme, saveTheme } from "@/lib/theme";
 
 export function ThemeToggle() {
   const [dark, setDark] = useState(true);
@@ -8,35 +9,17 @@ export function ThemeToggle() {
 
   useEffect(() => {
     setMounted(true);
-    const saved = localStorage.getItem("gx-theme");
-    const isDark = saved ? saved === "dark" : true;
+    const isDark = getSavedIsDark();
     setDark(isDark);
     applyTheme(isDark);
   }, []);
 
-  function applyTheme(isDark: boolean) {
-    const html = document.documentElement;
-    if (isDark) {
-      html.removeAttribute("data-theme");
-      html.style.colorScheme = "dark";
-    } else {
-      html.setAttribute("data-theme", "light");
-      html.style.colorScheme = "light";
-    }
-    // Also toggle gx-page light class
-    document.querySelectorAll(".gx-page").forEach((el) => {
-      el.classList.toggle("gx-light", !isDark);
-    });
-  }
-
   const toggle = useCallback(() => {
-    setDark((prev) => {
-      const next = !prev;
-      localStorage.setItem("gx-theme", next ? "dark" : "light");
-      applyTheme(next);
-      return next;
-    });
-  }, []);
+    const next = !dark;
+    setDark(next);
+    saveTheme(next);
+    applyTheme(next);
+  }, [dark]);
 
   if (!mounted) return null;
 

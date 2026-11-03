@@ -20,7 +20,18 @@ export type Issue = {
   id: string;
   issue_name: string;
   description: string | null;
+  issue_name_en?: string | null;
+  description_en?: string | null;
 };
+
+/* ——— Pilih nama/deskripsi kendala sesuai bahasa aktif ——— */
+export function localizeIssue(issue: Issue, locale: "id" | "en") {
+  if (locale !== "en") return { issue_name: issue.issue_name, description: issue.description };
+  return {
+    issue_name: issue.issue_name_en?.trim() || issue.issue_name,
+    description: issue.description_en?.trim() || issue.description,
+  };
+}
 
 export type TroubleshootStep = "platform" | "issue" | "solution";
 export type TransitionDirection = "forward" | "backward" | "none";

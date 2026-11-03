@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { isAdminRole } from "@/lib/admin-roles";
+import { hasPremiumAccess } from "@/lib/access";
 import { TroubleshootFlow } from "@/components/troubleshoot/troubleshoot-flow";
 import { TroubleshootHeader } from "@/components/troubleshoot/troubleshoot-header";
 
@@ -10,27 +10,7 @@ export default async function TroubleshootPage() {
 
   if (!user) redirect("/login");
 
-  // Check access
-  let hasAccess = false;
-  const { data: profile } = await supabase
-    .from("users")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (isAdminRole(profile?.role)) {
-    hasAccess = true;
-  } else {
-    const { data: activeCode } = await supabase
-      .from("access_codes")
-      .select("id")
-      .eq("used_by", user.id)
-      .eq("is_used", true)
-      .single();
-    hasAccess = !!activeCode;
-  }
-
-  if (!hasAccess) {
+  if (!(await hasPremiumAccess(supabase, user.id))) {
     redirect("/portal");
   }
 

@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { useTroubleshoot, getPlatformBrand } from "@/lib/troubleshoot-context";
+import { useTroubleshoot, getPlatformBrand, localizeIssue } from "@/lib/troubleshoot-context";
 import { createClient } from "@/lib/supabase/client";
 import { getSolutionsTable } from "@/lib/platform-tables";
+import { useI18n } from "@/lib/i18n";
 
 type Solution = {
   id: string;
@@ -11,6 +12,7 @@ type Solution = {
   step_number: number;
   content_type: string;
   content_data: string;
+  content_data_en: string | null;
   button_label: string | null;
   button_link: string | null;
   method_group: string;
@@ -21,8 +23,46 @@ type MethodGroup = {
   steps: Solution[];
 };
 
+/* ——— Button Icon Set (cute icons for up to 3 buttons) ——— */
+const BUTTON_ICONS = [
+  // Icon 1: Rocket 🚀
+  (
+    <svg key="rocket" className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.63 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.841m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+    </svg>
+  ),
+  // Icon 2: Sparkles ✨
+  (
+    <svg key="sparkles" className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+    </svg>
+  ),
+  // Icon 3: Heart 💖
+  (
+    <svg key="heart" className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+    </svg>
+  ),
+];
+
+/* ——— Parse pipe-separated button fields into arrays ——— */
+function parseButtons(label: string | null, link: string | null): { label: string; link: string }[] {
+  if (!label || !link) return [];
+  const labels = label.split("|").map((s) => s.trim()).filter(Boolean);
+  const links = link.split("|").map((s) => s.trim()).filter(Boolean);
+  const count = Math.min(labels.length, links.length, 3); // max 3
+  const buttons: { label: string; link: string }[] = [];
+  for (let i = 0; i < count; i++) {
+    if (labels[i] && links[i]) {
+      buttons.push({ label: labels[i], link: links[i] });
+    }
+  }
+  return buttons;
+}
+
 /* ——— Copy Button ——— */
 function CopyButton({ text }: { text: string }) {
+  const { t } = useI18n();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = useCallback(async () => {
@@ -51,25 +91,34 @@ function CopyButton({ text }: { text: string }) {
           : "bg-bg-secondary text-text-tertiary border-border-default hover:text-text-primary"
       }`}
     >
-      {copied ? "Copied" : "Copy"}
+      {copied ? t("troubleshoot.copied") : t("troubleshoot.copy")}
     </button>
   );
 }
 
-/* ——— Shortcut Button ——— */
-function ShortcutButton({ label, link }: { label: string; link: string }) {
+/* ——— Shortcut Buttons (up to 3, with cute icons) ——— */
+function ShortcutButtons({ solution }: { solution: Solution }) {
+  const buttons = parseButtons(solution.button_label, solution.button_link);
+  if (buttons.length === 0) return null;
+
   return (
-    <a
-      href={link}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm bg-accent/10 border border-accent/20 text-accent hover:bg-accent hover:text-white transition-colors duration-200"
-    >
-      <span>{label}</span>
-      <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-      </svg>
-    </a>
+    <div className="flex flex-wrap gap-2">
+      {buttons.map((btn, i) => (
+        <a
+          key={i}
+          href={btn.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium text-sm bg-accent/10 border border-accent/20 text-accent hover:bg-accent hover:text-white transition-all duration-200 hover:scale-[1.02] hover:shadow-md"
+        >
+          {BUTTON_ICONS[i % BUTTON_ICONS.length]}
+          <span>{btn.label}</span>
+          <svg className="w-3 h-3 shrink-0 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+          </svg>
+        </a>
+      ))}
+    </div>
   );
 }
 
@@ -108,6 +157,8 @@ function TextContent({ data }: { data: string }) {
 
 /* ——— Video Content ——— */
 function VideoContent({ data }: { data: string }) {
+  const { t } = useI18n();
+
   const getEmbedUrl = (url: string) => {
     const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
     if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
@@ -123,7 +174,7 @@ function VideoContent({ data }: { data: string }) {
           <iframe src={getEmbedUrl(data)} className="absolute inset-0 w-full h-full" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title="Tutorial" />
         </div>
         <a href={data} target="_blank" rel="noopener noreferrer" className="text-xs text-text-tertiary hover:text-accent transition-colors inline-flex items-center gap-1">
-          Buka di tab baru
+          {t("troubleshoot.openNewTab")}
           <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
           </svg>
@@ -147,9 +198,7 @@ function TemplateContent({ data, solution }: { data: string; solution: Solution 
         <pre className="p-3 text-sm text-text-primary font-mono leading-relaxed whitespace-pre-wrap break-words max-h-60 overflow-y-auto">{data}</pre>
       </div>
 
-      {solution.button_label && solution.button_link && (
-        <ShortcutButton label={solution.button_label} link={solution.button_link} />
-      )}
+      <ShortcutButtons solution={solution} />
     </div>
   );
 }
@@ -161,9 +210,7 @@ function ContentRenderer({ solution }: { solution: Solution }) {
       return (
         <div className="space-y-3">
           <VideoContent data={solution.content_data} />
-          {solution.button_label && solution.button_link && (
-            <ShortcutButton label={solution.button_label} link={solution.button_link} />
-          )}
+          <ShortcutButtons solution={solution} />
         </div>
       );
     case "template":
@@ -172,9 +219,7 @@ function ContentRenderer({ solution }: { solution: Solution }) {
       return (
         <div className="space-y-3">
           <TextContent data={solution.content_data} />
-          {solution.button_label && solution.button_link && (
-            <ShortcutButton label={solution.button_label} link={solution.button_link} />
-          )}
+          <ShortcutButtons solution={solution} />
         </div>
       );
   }
@@ -182,21 +227,23 @@ function ContentRenderer({ solution }: { solution: Solution }) {
 
 /* ——— Type Badge ——— */
 function TypeBadge({ type }: { type: string }) {
-  const labels: Record<string, string> = {
-    text: "Teks",
-    video: "Video",
-    template: "Template",
-    link: "Link",
+  const { t } = useI18n();
+  const labelMap: Record<string, string> = {
+    text: t("troubleshoot.text"),
+    video: t("troubleshoot.video"),
+    template: t("troubleshoot.template"),
+    link: t("troubleshoot.link"),
   };
   return (
     <span className="text-[10px] font-medium text-text-tertiary px-1.5 py-0.5 rounded bg-bg-tertiary">
-      {labels[type] || "Teks"}
+      {labelMap[type] || t("troubleshoot.text")}
     </span>
   );
 }
 
 /* ——— Main: Solution Viewer ——— */
 export function SolutionViewer() {
+  const { t, locale } = useI18n();
   const { selectedIssue, selectedPlatform, goBack, reset, setError } = useTroubleshoot();
   const [solutions, setSolutions] = useState<Solution[]>([]);
   const [loading, setLoading] = useState(true);
@@ -220,27 +267,26 @@ export function SolutionViewer() {
         const tableName = getSolutionsTable(selectedPlatform.name);
         setDebugTable(tableName);
 
-        // Debug: log tabel yang di-query
         console.log(`[SolutionViewer] Platform: "${selectedPlatform.name}" → Table: "${tableName}" → Issue ID: "${selectedIssue.id}"`);
 
         const { data, error } = await supabase
           .from(tableName)
-          .select("id, issue_id, step_number, content_type, content_data, button_label, button_link, method_group")
+          .select("id, issue_id, step_number, content_type, content_data, content_data_en, button_label, button_link, method_group")
           .eq("issue_id", selectedIssue.id)
           .order("method_group")
           .order("step_number");
 
         if (error) {
           console.error(`[SolutionViewer] Error querying ${tableName}:`, error);
-          setFetchError(`Gagal memuat solusi dari ${tableName}: ${error.message}`);
-          setError(`Gagal memuat solusi untuk ${selectedPlatform.name}`);
+          setFetchError(`${t("troubleshoot.errorLoading")} (${tableName}): ${error.message}`);
+          setError(`${t("troubleshoot.errorLoading")} — ${selectedPlatform.name}`);
         } else if (data) {
           console.log(`[SolutionViewer] Loaded ${data.length} solutions from ${tableName}`);
           setSolutions(data);
           if (data.length > 0) setExpandedSteps(new Set([data[0].id]));
         }
       } catch (err) {
-        const msg = err instanceof Error ? err.message : "Terjadi kesalahan";
+        const msg = err instanceof Error ? err.message : t("troubleshoot.errorLoading");
         setFetchError(msg);
         setError(msg);
       }
@@ -248,7 +294,7 @@ export function SolutionViewer() {
     };
 
     fetchSolutions();
-  }, [selectedIssue, selectedPlatform, setError]);
+  }, [selectedIssue, selectedPlatform, setError, t]);
 
   if (!selectedIssue || !selectedPlatform) return null;
 
@@ -256,8 +302,14 @@ export function SolutionViewer() {
 
   const methodGroups: MethodGroup[] = [];
   const groupMap = new Map<string, Solution[]>();
-  for (const s of solutions) {
-    const key = s.method_group || "Metode 1";
+  for (const raw of solutions) {
+    // Pakai versi Inggris jika tersedia, fallback ke Indonesia
+    const s =
+      locale === "en" && raw.content_data_en?.trim()
+        ? { ...raw, content_data: raw.content_data_en }
+        : raw;
+    const group = s.method_group || "Metode 1";
+    const key = locale === "en" ? group.replace(/^metode\b/i, "Method") : group;
     if (!groupMap.has(key)) groupMap.set(key, []);
     groupMap.get(key)!.push(s);
   }
@@ -304,12 +356,12 @@ export function SolutionViewer() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
               </svg>
               <span className="text-[11px] font-semibold text-text-secondary">
-                {selectedIssue.issue_name}
+                {localizeIssue(selectedIssue, locale).issue_name}
               </span>
             </div>
-            <h2 className="text-lg font-bold text-text-primary">Panduan Solusi</h2>
+            <h2 className="text-lg font-bold text-text-primary">{t("troubleshoot.solution")}</h2>
             <p className="text-xs text-text-tertiary mt-0.5">
-              Ikuti langkah berikut untuk menyelesaikan masalah Anda
+              {t("troubleshoot.solutionSubtitle")}
               {debugTable && <span className="font-mono"> ({debugTable})</span>}
             </p>
           </div>
@@ -318,7 +370,7 @@ export function SolutionViewer() {
           onClick={reset}
           className="text-xs text-text-tertiary hover:text-danger transition-colors shrink-0 px-2 py-1 rounded hover:bg-danger/5"
         >
-          Reset
+          {t("troubleshoot.reset")}
         </button>
       </div>
 
@@ -344,9 +396,9 @@ export function SolutionViewer() {
       {/* Empty */}
       {!loading && solutions.length === 0 && !fetchError && (
         <div className="text-center py-12 rounded-xl border border-dashed border-border-subtle bg-bg-secondary/50">
-          <p className="text-sm font-medium text-text-secondary">Belum ada solusi tersedia</p>
+          <p className="text-sm font-medium text-text-secondary">{t("troubleshoot.noSolution")}</p>
           <p className="text-xs text-text-tertiary mt-1">
-            Panduan untuk masalah ini di <span className="font-medium" style={{ color: brand.primary }}>{selectedPlatform.name}</span> sedang disiapkan.
+            {t("troubleshoot.noSolutionDesc")} — <span className="font-medium" style={{ color: brand.primary }}>{selectedPlatform.name}</span>
           </p>
         </div>
       )}
@@ -403,7 +455,7 @@ export function SolutionViewer() {
             }}
             className="text-[11px] font-medium text-text-tertiary hover:text-accent transition-colors px-2 py-1 rounded hover:bg-accent/5"
           >
-            {allExpanded ? "Tutup Semua" : "Buka Semua"}
+            {allExpanded ? t("troubleshoot.closeAll") : t("troubleshoot.openAll")}
           </button>
         </div>
       )}
@@ -441,8 +493,17 @@ export function SolutionViewer() {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-sm font-medium text-text-primary">Langkah {solution.step_number}</span>
+                      <span className="text-sm font-medium text-text-primary">{t("troubleshoot.step")} {solution.step_number}</span>
                       <TypeBadge type={solution.content_type} />
+                      {/* Show button count badge if multiple buttons */}
+                      {(() => {
+                        const btnCount = parseButtons(solution.button_label, solution.button_link).length;
+                        return btnCount > 1 ? (
+                          <span className="text-[9px] font-bold text-accent bg-accent/10 px-1.5 py-0.5 rounded-full">
+                            {btnCount} links
+                          </span>
+                        ) : null;
+                      })()}
                     </div>
                     {!isExpanded && (
                       <p className="text-xs text-text-tertiary truncate mt-0.5">
@@ -483,7 +544,7 @@ export function SolutionViewer() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <p className="text-xs text-text-tertiary">Akhir panduan</p>
+            <p className="text-xs text-text-tertiary">{t("troubleshoot.endGuide")}</p>
           </div>
         </div>
       )}

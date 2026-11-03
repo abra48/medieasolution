@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { getSavedIsDark, applyTheme, saveTheme } from "@/lib/theme";
 
 /**
  * Global theme toggle — works on ALL pages (portal, login, register, etc.)
@@ -12,20 +13,17 @@ export function GlobalThemeToggle() {
 
   useEffect(() => {
     setMounted(true);
-    const saved = localStorage.getItem("mediea-theme");
-    const isDark = saved ? saved === "dark" : true; // default dark
+    const isDark = getSavedIsDark();
     setDark(isDark);
-    document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+    applyTheme(isDark);
   }, []);
 
   const toggle = useCallback(() => {
-    setDark((prev) => {
-      const next = !prev;
-      localStorage.setItem("mediea-theme", next ? "dark" : "light");
-      document.documentElement.setAttribute("data-theme", next ? "dark" : "light");
-      return next;
-    });
-  }, []);
+    const next = !dark;
+    setDark(next);
+    saveTheme(next);
+    applyTheme(next);
+  }, [dark]);
 
   if (!mounted) return null;
 

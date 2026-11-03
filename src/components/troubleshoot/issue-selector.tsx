@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useTroubleshoot, getPlatformBrand } from "@/lib/troubleshoot-context";
+import { useTroubleshoot, getPlatformBrand, localizeIssue, type Issue } from "@/lib/troubleshoot-context";
+import { useI18n } from "@/lib/i18n";
 import { createClient } from "@/lib/supabase/client";
 import { getIssuesTable } from "@/lib/platform-tables";
 import {
@@ -12,11 +13,6 @@ import {
   IconChevronRight,
 } from "@/components/icons";
 
-type Issue = {
-  id: string;
-  issue_name: string;
-  description: string | null;
-};
 
 /* ——— Issue-specific icons (clean, geometric SVGs) ——— */
 function IconBlocked({ className = "w-4 h-4" }: { className?: string }) {
@@ -77,6 +73,7 @@ function IconBack({ className = "w-4 h-4" }: { className?: string }) {
 }
 
 export function IssueSelector() {
+  const { t, locale } = useI18n();
   const { currentStep, selectedPlatform, selectIssue, goBack, setError } = useTroubleshoot();
   const [issues, setIssues] = useState<Issue[]>([]);
   const [loading, setLoading] = useState(true);
@@ -101,20 +98,20 @@ export function IssueSelector() {
 
         const { data, error } = await supabase
           .from(tableName)
-          .select("id, issue_name, description")
+          .select("id, issue_name, description, issue_name_en, description_en")
           .eq("status", "active")
           .order("issue_name");
 
         if (error) {
           console.error(`[IssueSelector] Error querying ${tableName}:`, error);
-          setFetchError(`Gagal memuat data dari ${tableName}: ${error.message}`);
-          setError(`Gagal memuat kendala untuk ${selectedPlatform.name}`);
+          setFetchError(`${t("troubleshoot.errorLoading")} (${tableName}): ${error.message}`);
+          setError(`${t("troubleshoot.errorLoading")} — ${selectedPlatform.name}`);
         } else {
           console.log(`[IssueSelector] Loaded ${data?.length || 0} issues from ${tableName}`);
           setIssues(data || []);
         }
       } catch (err) {
-        const msg = err instanceof Error ? err.message : "Terjadi kesalahan";
+        const msg = err instanceof Error ? err.message : t("troubleshoot.errorLoading");
         setFetchError(msg);
         setError(msg);
       }
@@ -122,16 +119,19 @@ export function IssueSelector() {
     };
 
     fetchIssues();
-  }, [currentStep, selectedPlatform, setError]);
+  }, [currentStep, selectedPlatform, setError, t]);
 
   if (currentStep !== "issue" || !selectedPlatform) return null;
 
   const brand = getPlatformBrand(selectedPlatform.name);
 
-  const filtered = issues.filter((issue) =>
-    issue.issue_name.toLowerCase().includes(search.toLowerCase()) ||
-    (issue.description || "").toLowerCase().includes(search.toLowerCase())
-  );
+  const query = search.toLowerCase();
+  const filtered = issues
+    .map((issue) => ({ issue, text: localizeIssue(issue, locale) }))
+    .filter(({ text }) =>
+      text.issue_name.toLowerCase().includes(query) ||
+      (text.description || "").toLowerCase().includes(query)
+    );
 
   return (
     <div className="ts-step-enter">
@@ -144,8 +144,8 @@ export function IssueSelector() {
           <IconBack />
         </button>
         <div>
-          <p className="text-xs text-text-tertiary mb-0.5">Langkah 2 dari 3</p>
-          <h2 className="text-lg font-bold text-text-primary">Pilih Masalah</h2>
+          <p className="text-xs text-text-tertiary mb-0.5">{t("troubleshoot.step2of3")}</p>
+          <h2 className="text-lg font-bold text-text-primary">{t("troubleshoot.chooseIssue")}</h2>
           <div className="flex items-center gap-1.5 mt-1">
             <span
               className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold"
@@ -171,7 +171,7 @@ export function IssueSelector() {
           <IconSearch className="w-4 h-4" />
           <input
             type="text"
-            placeholder="Cari kendala..."
+            placeholder={t("troubleshoot.searchIssue")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             autoComplete="off"
@@ -197,17 +197,17 @@ export function IssueSelector() {
       ) : filtered.length === 0 && !fetchError ? (
         <div className="text-center py-12 rounded-xl border border-dashed border-border-subtle bg-bg-secondary/50">
           <p className="text-sm font-medium text-text-secondary">
-            {search ? "Tidak ditemukan" : "Belum ada masalah tersedia"}
+            {search ? t("troubleshoot.notFound") : t("troubleshoot.noIssue")}
           </p>
           <p className="text-xs text-text-tertiary mt-1">
-            {search ? "Coba kata kunci lain." : (
-              <>Panduan untuk <span className="font-medium" style={{ color: brand.primary }}>{selectedPlatform.name}</span> sedang disiapkan.</>
+            {search ? t("troubleshoot.tryOtherKeyword") : (
+              <>{t("troubleshoot.noSolutionDesc")} — <span className="font-medium" style={{ color: brand.primary }}>{selectedPlatform.name}</span></>
             )}
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-          {filtered.map((issue, i) => {
+          {filtered.map(({ issue, text }, i) => {
             const icon = getIssueIcon(issue.issue_name);
             return (
               <button
@@ -227,11 +227,11 @@ export function IssueSelector() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-semibold text-text-primary">
-                      {issue.issue_name}
+                      {text.issue_name}
                     </p>
-                    {issue.description && (
+                    {text.description && (
                       <p className="text-xs text-text-tertiary mt-0.5 line-clamp-2 leading-relaxed">
-                        {issue.description}
+                        {text.description}
                       </p>
                     )}
                   </div>

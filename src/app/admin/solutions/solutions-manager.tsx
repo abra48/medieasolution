@@ -330,43 +330,126 @@ export function SolutionsManager({ platforms }: { platforms: Platform[] }) {
                 )}
               </div>
 
-              {/* Dynamic Button Fields */}
+              {/* Dynamic Button Fields — up to 3 buttons */}
               <div
-                className="bg-accent-gold/5 border border-accent-gold/20 p-4 space-y-3"
+                className="bg-accent-gold/5 border border-accent-gold/20 p-4 space-y-4"
                 style={{ clipPath: "polygon(0 3px, 3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%)" }}
               >
                 <div className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-accent-gold shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
-                  <span className="text-xs font-semibold text-accent-gold">Tombol Aksi Dinamis</span>
+                  <span className="text-xs font-semibold text-accent-gold">Dynamic Action Buttons (up to 3)</span>
                 </div>
                 <p className="text-[10px] text-text-tertiary">
-                  Jika kedua kolom diisi, tombol shortcut akan muncul di langkah solusi pengguna. Biarkan keduanya kosong jika tidak diperlukan.
+                  Add up to 3 shortcut buttons with cute icons. Each button needs both a label and a URL. Leave empty if not needed.
                 </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-1">
-                      Nama Tombol
-                    </label>
-                    <input
-                      name="button_label"
-                      type="text"
-                      placeholder="Contoh: Buka Formulir Pemulihan"
-                      className="input !py-2 text-sm"
-                    />
+                {/* Button 1 */}
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-accent/15 text-accent flex items-center justify-center">
+                      <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.63 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.841m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                      </svg>
+                    </span>
+                    <span className="text-[10px] font-semibold text-accent uppercase tracking-wider">Button 1 — 🚀 Rocket</span>
                   </div>
-                  <div>
-                    <label className="block text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-1">
-                      Tautan Tombol
-                    </label>
-                    <input
-                      name="button_link"
-                      type="url"
-                      placeholder="https://help.platform.com/recovery-form"
-                      className="input !py-2 text-sm font-mono"
-                    />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-1">
+                        Button Label 1
+                      </label>
+                      <input
+                        name="button_label_1"
+                        type="text"
+                        placeholder="e.g. Open Recovery Form"
+                        className="input !py-2 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-1">
+                        Button URL 1
+                      </label>
+                      <input
+                        name="button_link_1"
+                        type="url"
+                        placeholder="https://help.platform.com/recovery"
+                        className="input !py-2 text-sm font-mono"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Button 2 */}
+                <div className="space-y-2 border-t border-accent-gold/10 pt-3">
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-accent/15 text-accent flex items-center justify-center">
+                      <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                      </svg>
+                    </span>
+                    <span className="text-[10px] font-semibold text-text-tertiary uppercase tracking-wider">Button 2 — ✨ Sparkles (optional)</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-1">
+                        Button Label 2
+                      </label>
+                      <input
+                        name="button_label_2"
+                        type="text"
+                        placeholder="e.g. Download Template"
+                        className="input !py-2 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-1">
+                        Button URL 2
+                      </label>
+                      <input
+                        name="button_link_2"
+                        type="url"
+                        placeholder="https://..."
+                        className="input !py-2 text-sm font-mono"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Button 3 */}
+                <div className="space-y-2 border-t border-accent-gold/10 pt-3">
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-accent/15 text-accent flex items-center justify-center">
+                      <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                      </svg>
+                    </span>
+                    <span className="text-[10px] font-semibold text-text-tertiary uppercase tracking-wider">Button 3 — 💖 Heart (optional)</span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-1">
+                        Button Label 3
+                      </label>
+                      <input
+                        name="button_label_3"
+                        type="text"
+                        placeholder="e.g. Watch Tutorial"
+                        className="input !py-2 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-1">
+                        Button URL 3
+                      </label>
+                      <input
+                        name="button_link_3"
+                        type="url"
+                        placeholder="https://..."
+                        className="input !py-2 text-sm font-mono"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

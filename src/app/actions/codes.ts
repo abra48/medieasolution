@@ -40,7 +40,8 @@ export async function redeemAccessCode(
     .select("id")
     .eq("used_by", user.id)
     .eq("is_used", true)
-    .single();
+    .limit(1)
+    .maybeSingle();
 
   if (existingCode) {
     return { success: true, message: "Akses premium Anda sudah aktif." };
@@ -62,7 +63,7 @@ export async function redeemAccessCode(
   }
 
   // Redeem the code — use admin client to bypass RLS
-  const { error: updateError } = await adminClient
+  const { data: redeemed, error: updateError } = await adminClient
     .from("access_codes")
     .update({
       is_used: true,
@@ -70,7 +71,12 @@ export async function redeemAccessCode(
       used_at: new Date().toISOString(),
     })
     .eq("id", accessCode.id)
-    .eq("is_used", false); // Extra safety: only update if still unused
+    .eq("is_used", false) // Extra safety: only update if still unused
+    .select("id");
+
+  if (!updateError && (!redeemed || redeemed.length === 0)) {
+    return { error: "Kode akses sudah digunakan. Setiap kode hanya berlaku 1x pakai." };
+  }
 
   if (updateError) {
     console.error("Failed to redeem code:", updateError);

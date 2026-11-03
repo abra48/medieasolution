@@ -3,6 +3,7 @@
 import React, { useState, useCallback } from "react";
 import { useTroubleshoot, getPlatformBrand } from "@/lib/troubleshoot-context";
 import { IconSearch, IconArrowRight } from "@/components/icons";
+import { useI18n } from "@/lib/i18n";
 
 type Platform = {
   id: string;
@@ -57,6 +58,7 @@ const PLATFORM_ICONS: Record<string, React.ReactNode> = {
 
 export function PlatformGrid({ platforms }: { platforms: Platform[] }) {
   const { currentStep, selectPlatform } = useTroubleshoot();
+  const { t } = useI18n();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
 
@@ -77,9 +79,9 @@ export function PlatformGrid({ platforms }: { platforms: Platform[] }) {
   return (
     <div className="ts-step-enter">
       <div className="mb-6">
-        <p className="text-xs font-medium text-text-tertiary uppercase tracking-wider mb-1">Langkah 1 dari 3</p>
-        <h2 className="text-lg font-bold text-text-primary">Pilih Platform</h2>
-        <p className="text-sm text-text-tertiary mt-0.5">Pilih akun media sosial yang perlu dipulihkan.</p>
+        <p className="text-xs font-medium text-text-tertiary uppercase tracking-wider mb-1">{t("troubleshoot.step1of3")}</p>
+        <h2 className="text-lg font-bold text-text-primary">{t("troubleshoot.choosePlatform")}</h2>
+        <p className="text-sm text-text-tertiary mt-0.5">{t("troubleshoot.choosePlatformDesc")}</p>
       </div>
 
       {/* Search */}
@@ -88,7 +90,7 @@ export function PlatformGrid({ platforms }: { platforms: Platform[] }) {
           <IconSearch className="w-4 h-4" />
           <input
             type="text"
-            placeholder="Cari platform..."
+            placeholder={t("troubleshoot.searchPlatform")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             autoComplete="off"
@@ -99,8 +101,8 @@ export function PlatformGrid({ platforms }: { platforms: Platform[] }) {
       {filtered.length === 0 ? (
         <div className="text-center py-12 rounded-xl border border-dashed border-border-subtle bg-bg-secondary/50">
           <IconSearch className="w-8 h-8 text-text-tertiary mx-auto mb-2 opacity-40" />
-          <p className="text-sm text-text-secondary">Tidak ditemukan</p>
-          <p className="text-xs text-text-tertiary mt-1">Coba kata kunci lain.</p>
+          <p className="text-sm text-text-secondary">{t("troubleshoot.notFound")}</p>
+          <p className="text-xs text-text-tertiary mt-1">{t("troubleshoot.tryOtherKeyword")}</p>
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
@@ -156,7 +158,7 @@ export function PlatformGrid({ platforms }: { platforms: Platform[] }) {
 
                   {/* Hover arrow */}
                   <div className="flex items-center gap-1 mt-1.5 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-[-4px] group-hover:translate-x-0">
-                    <span className="text-[10px] font-medium" style={{ color: brand.primary }}>Pilih</span>
+                    <span className="text-[10px] font-medium" style={{ color: brand.primary }}>{t("troubleshoot.select")}</span>
                     <IconArrowRight className="w-3 h-3" color={brand.primary} />
                   </div>
                 </div>

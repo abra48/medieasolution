@@ -12,16 +12,17 @@ export function TroubleshootHeader() {
           fontSize: "clamp(1.5rem, 3vw, 2rem)",
           fontWeight: 400,
           fontStyle: "italic",
-          color: "#e8e6e1",
+          color: "var(--p-text)",
           lineHeight: 1.15,
           marginBottom: 4,
         }}
       >
         {t("troubleshoot.title")}
       </h1>
-      <p style={{ fontSize: 14, color: "#7a7a72", lineHeight: 1.7 }}>
+      <p style={{ fontSize: 14, color: "var(--p-muted)", lineHeight: 1.7 }}>
         {t("troubleshoot.subtitle")}
       </p>
     </div>
   );
 }
+

@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import { login, type AuthState } from "@/app/actions/auth";
 import Link from "next/link";
 import { I18nProvider, useI18n } from "@/lib/i18n";
-import { LanguageSwitcher } from "../language-switcher";
+import { GlobalLanguageSwitcher as LanguageSwitcher } from "@/components/global-language-switcher";
 import { GlobalThemeToggle } from "@/components/global-theme-toggle";
 
 function LoginPageInner() {

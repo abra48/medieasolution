@@ -40,10 +40,10 @@ export function PortalWelcome({ hasAccess }: { hasAccess: boolean }) {
   const s = {
     serif: 'Georgia, "Times New Roman", serif',
     mono: '"SF Mono", "Fira Code", monospace',
-    muted: "#7a7a72",
-    text: "#e8e6e1",
-    border: "rgba(255,255,255,0.08)",
-    bg: "#0a0a0a",
+    muted: "var(--p-muted)",
+    text: "var(--p-text)",
+    border: "var(--p-border)",
+    bg: "var(--p-bg)",
   };
 
   if (hasAccess) {
@@ -68,7 +68,7 @@ export function PortalWelcome({ hasAccess }: { hasAccess: boolean }) {
               href={item.href}
               style={{ display: "flex", alignItems: "baseline", gap: 24, padding: "20px 0", borderBottom: `1px solid ${s.border}`, textDecoration: "none", transition: "opacity 0.2s" }}
             >
-              <span style={{ fontFamily: s.mono, fontSize: 10, color: "rgba(122,122,114,0.4)", minWidth: 20 }}>0{i + 1}</span>
+              <span style={{ fontFamily: s.mono, fontSize: 10, color: "var(--p-faint)", minWidth: 20 }}>0{i + 1}</span>
               <div>
                 <p style={{ fontSize: 14, fontWeight: 500, color: s.text, letterSpacing: "0.02em", marginBottom: 2 }}>{item.label}</p>
                 <p style={{ fontSize: 12, color: s.muted }}>{item.desc}</p>
@@ -111,7 +111,7 @@ export function PortalWelcome({ hasAccess }: { hasAccess: boolean }) {
           type="submit"
           disabled={!code.trim() || loading || !!success}
           style={{
-            width: "100%", padding: "14px 0", background: "#1a1a1a", color: s.text, border: `1px solid ${s.border}`,
+            width: "100%", padding: "14px 0", background: "var(--p-surface)", color: s.text, border: `1px solid ${s.border}`,
             fontSize: 11, fontWeight: 500, letterSpacing: "0.12em", textTransform: "uppercase" as const, cursor: "pointer",
             opacity: (!code.trim() || loading || !!success) ? 0.4 : 1, fontFamily: "inherit"
           }}

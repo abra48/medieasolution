@@ -44,15 +44,15 @@ export default async function AdminLayout({
   const NAV_ITEMS = ALL_NAV_ITEMS.filter((item) => perms[item.key]);
 
   return (
-    <div className="min-h-screen flex" style={{ background: '#0a0a0a', color: '#e8e6e1' }}>
+    <div className="min-h-screen flex" style={{ background: 'var(--p-bg)', color: 'var(--p-text)' }}>
       {/* Sidebar */}
-      <aside className="w-56 flex-col shrink-0 hidden md:flex" style={{ background: '#0e0e0e', borderRight: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className="h-14 px-4 flex items-center" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+      <aside className="w-56 flex-col shrink-0 hidden md:flex" style={{ background: 'var(--p-bg-alt)', borderRight: '1px solid var(--p-border)' }}>
+        <div className="h-14 px-4 flex items-center" style={{ borderBottom: '1px solid var(--p-border)' }}>
           <Link href="/admin" className="flex items-center gap-0" style={{ fontFamily: 'Georgia, "Times New Roman", serif', letterSpacing: '-0.02em' }}>
-            <span className="text-xs" style={{ color: '#e8e6e1' }}>mediea</span>
-            <span className="text-xs" style={{ color: '#7a7a72' }}>/</span>
-            <span className="text-xs italic" style={{ color: '#c5c3b8' }}>solution</span>
-            <span className="text-[9px] uppercase tracking-widest ml-2" style={{ color: '#4a4a44' }}>Admin</span>
+            <span className="text-xs" style={{ color: 'var(--p-text)' }}>mediea</span>
+            <span className="text-xs" style={{ color: 'var(--p-muted)' }}>/</span>
+            <span className="text-xs italic" style={{ color: 'var(--p-soft)' }}>solution</span>
+            <span className="text-[9px] uppercase tracking-widest ml-2" style={{ color: 'var(--p-faint)' }}>Admin</span>
           </Link>
         </div>
 
@@ -62,28 +62,28 @@ export default async function AdminLayout({
               key={item.href}
               href={item.href}
               className="block px-3 py-2 text-xs font-medium rounded-md transition-colors"
-              style={{ color: '#7a7a72', letterSpacing: '0.03em' }}
+              style={{ color: 'var(--p-muted)', letterSpacing: '0.03em' }}
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <div className="p-3" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="p-3" style={{ borderTop: '1px solid var(--p-border)' }}>
           <div className="flex items-center gap-2 mb-2">
-            <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.05)' }}>
-              <span className="text-[9px] font-bold" style={{ color: '#c5c3b8' }}>{tierLabel.charAt(0)}</span>
+            <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: 'var(--p-surface)' }}>
+              <span className="text-[9px] font-bold" style={{ color: 'var(--p-soft)' }}>{tierLabel.charAt(0)}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[10px] font-medium truncate" style={{ color: '#e8e6e1' }}>{user.email}</p>
-              <p className="text-[9px] uppercase tracking-wider" style={{ color: '#4a4a44' }}>{tierLabel}</p>
+              <p className="text-[10px] font-medium truncate" style={{ color: 'var(--p-text)' }}>{user.email}</p>
+              <p className="text-[9px] uppercase tracking-wider" style={{ color: 'var(--p-faint)' }}>{tierLabel}</p>
             </div>
           </div>
           <form action={logout}>
             <button
               type="submit"
               className="w-full text-[10px] px-2 py-1.5 rounded-md transition-colors text-left"
-              style={{ color: '#7a7a72', letterSpacing: '0.05em', textTransform: 'uppercase' }}
+              style={{ color: 'var(--p-muted)', letterSpacing: '0.05em', textTransform: 'uppercase' }}
             >
               Sign out
             </button>
@@ -94,24 +94,24 @@ export default async function AdminLayout({
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Mobile header */}
-        <header className="md:hidden h-12 px-4 flex items-center justify-between" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', background: '#0e0e0e' }}>
-          <Link href="/admin" className="text-xs font-medium" style={{ color: '#e8e6e1', fontFamily: 'Georgia, "Times New Roman", serif' }}>
-            mediea<span style={{ color: '#7a7a72' }}>/</span><em style={{ color: '#c5c3b8' }}>solution</em>
+        <header className="md:hidden h-12 px-4 flex items-center justify-between" style={{ borderBottom: '1px solid var(--p-border)', background: 'var(--p-bg-alt)' }}>
+          <Link href="/admin" className="text-xs font-medium" style={{ color: 'var(--p-text)', fontFamily: 'Georgia, "Times New Roman", serif' }}>
+            mediea<span style={{ color: 'var(--p-muted)' }}>/</span><em style={{ color: 'var(--p-soft)' }}>solution</em>
           </Link>
           <form action={logout}>
-            <button type="submit" className="text-xs" style={{ color: '#7a7a72', textTransform: 'uppercase', fontSize: '10px', letterSpacing: '0.05em' }}>Sign out</button>
+            <button type="submit" className="text-xs" style={{ color: 'var(--p-muted)', textTransform: 'uppercase', fontSize: '10px', letterSpacing: '0.05em' }}>Sign out</button>
           </form>
         </header>
 
         {/* Mobile nav */}
-        <div className="md:hidden overflow-x-auto px-2" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(14,14,14,0.5)' }}>
+        <div className="md:hidden overflow-x-auto px-2" style={{ borderBottom: '1px solid var(--p-border)', background: 'var(--p-nav-bg)' }}>
           <div className="flex gap-0">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 className="px-3 py-2 text-[11px] font-medium shrink-0"
-                style={{ color: '#7a7a72', letterSpacing: '0.05em', textTransform: 'uppercase' }}
+                style={{ color: 'var(--p-muted)', letterSpacing: '0.05em', textTransform: 'uppercase' }}
               >
                 {item.label}
               </Link>
