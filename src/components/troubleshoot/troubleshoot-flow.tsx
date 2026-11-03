@@ -29,19 +29,12 @@ function TroubleshootContent({ platforms }: { platforms: Platform[] }) {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-10">
       {/* Global error banner */}
       {error && (
-        <div className="flex items-center gap-3 p-3 rounded-lg bg-danger/5 border border-danger/15">
-          <svg className="w-4 h-4 text-danger shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-          </svg>
-          <span className="text-xs text-danger flex-1">{error}</span>
-          <button onClick={clearError} className="text-danger/60 hover:text-danger transition-colors shrink-0">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+        <div className="mx-notice mx-notice-error flex items-center gap-3">
+          <span className="flex-1">{error}</span>
+          <button type="button" onClick={clearError} className="mx-link" aria-label="Tutup">×</button>
         </div>
       )}
 

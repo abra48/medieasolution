@@ -104,25 +104,6 @@ const STAT_DATA = [
   { target: 99, suffix: "%", labelKey: "stats.successRate" },
 ];
 
-/* ——— Feature/Service Data ——— */
-const SERVICE_TAGS_KEYS = [
-  ["feature1.title", "feature2.title"],
-  ["feature3.title", "feature4.title"],
-  ["feature5.title", "feature6.title"],
-];
-
-const SERVICE_DESC_KEYS = [
-  "feature1.desc",
-  "feature3.desc",
-  "feature5.desc",
-];
-
-const SERVICE_TITLE_KEYS = [
-  "feature1.title",
-  "feature3.title",
-  "feature5.title",
-];
-
 const TESTIMONIAL_META = [
   { initials: "AR", bg: "#1877F2" },
   { initials: "SN", bg: "#E4405F" },
@@ -136,7 +117,7 @@ const TESTIMONIAL_META = [
    LANDING PAGE CONTENT — Gerti/x Inspired Design
    ================================================================ */
 
-function LandingPageInner() {
+function LandingPageInner({ stepImages }: { stepImages: Record<number, string> }) {
   const { t } = useI18n();
 
   const steps = [
@@ -226,6 +207,7 @@ function LandingPageInner() {
           </div>
           <div className="gx-hero-visual gx-hero-animate-4">
             <div className="gx-hero-image-wrapper">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/hero-image.jpg" alt="Digital Recovery" className="gx-hero-img" />
             </div>
           </div>
@@ -300,7 +282,12 @@ function LandingPageInner() {
             </div>
             <div className="gx-service-visual">
               <div className="gx-service-image">
-                <span className="gx-service-step-num">{String(i + 1).padStart(2, "0")}</span>
+                {stepImages[i + 1] ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={stepImages[i + 1]} alt={t(step.titleKey)} className="gx-service-img" loading="lazy" />
+                ) : (
+                  <span className="gx-service-step-num">{String(i + 1).padStart(2, "0")}</span>
+                )}
               </div>
             </div>
           </div>
@@ -453,10 +440,10 @@ function LandingPageInner() {
 }
 
 /* ——— Exported Wrapped Component ——— */
-export function LandingPageContent() {
+export function LandingPageContent({ stepImages = {} }: { stepImages?: Record<number, string> }) {
   return (
     <I18nProvider>
-      <LandingPageInner />
+      <LandingPageInner stepImages={stepImages} />
     </I18nProvider>
   );
 }

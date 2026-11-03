@@ -1,104 +1,45 @@
 "use client";
 
-import { useTroubleshoot, getPlatformBrand } from "@/lib/troubleshoot-context";
-
-/** Compact checkmark for step completion */
-function IconCheck({ className = "w-3 h-3" }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="5 13 10 17 19 7" />
-    </svg>
-  );
-}
+import { useTroubleshoot, localizeIssue } from "@/lib/troubleshoot-context";
+import { useI18n } from "@/lib/i18n";
 
 export function ProgressTracker() {
-  const { currentStep, selectedPlatform } = useTroubleshoot();
+  const { t, locale } = useI18n();
+  const { currentStep, selectedPlatform, selectedIssue } = useTroubleshoot();
 
-  const STEPS = [
-    { key: "platform" as const, label: "Platform", number: 1 },
-    { key: "issue" as const, label: "Masalah", number: 2 },
-    { key: "solution" as const, label: "Solusi", number: 3 },
-  ];
-
-  const stepOrder = { platform: 1, issue: 2, solution: 3 };
-  const currentNum = stepOrder[currentStep];
-  const brand = selectedPlatform ? getPlatformBrand(selectedPlatform.name) : null;
-  const activeColor = brand?.primary || "#10b981";
+  const steps = [
+    { key: "platform", label: t("troubleshoot.platform"), value: selectedPlatform?.name },
+    { key: "issue", label: t("troubleshoot.issue"), value: selectedIssue ? localizeIssue(selectedIssue, locale).issue_name : undefined },
+    { key: "solution", label: t("troubleshoot.solutionShort"), value: undefined },
+  ] as const;
+  const currentIndex = steps.findIndex((s) => s.key === currentStep);
 
   return (
-    <div className="flex items-center gap-2 p-1.5 bg-bg-secondary rounded-xl border border-border-subtle">
-      {STEPS.map((s, i) => {
-        const isCurrent = currentNum === s.number;
-        const isPast = currentNum > s.number;
-        const isActive = isCurrent || isPast;
-
+    <ol className="grid grid-cols-3" style={{ borderTop: "1px solid var(--p-border)" }} aria-label="Progress">
+      {steps.map((s, i) => {
+        const reached = i <= currentIndex;
         return (
-          <div key={s.key} className="flex items-center gap-2 flex-1">
-            <div
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg flex-1 transition-all duration-300 ${
-                isCurrent
-                  ? "border"
-                  : isPast
-                  ? "bg-bg-tertiary/50"
-                  : "opacity-30"
-              }`}
-              style={isCurrent ? {
-                backgroundColor: `${activeColor}08`,
-                borderColor: `${activeColor}25`,
-              } : {}}
-            >
-              <span
-                className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 transition-all duration-300 ${
-                  !isActive ? "bg-bg-tertiary text-text-tertiary" : ""
-                }`}
-                style={isCurrent ? {
-                  backgroundColor: activeColor,
-                  color: '#fff',
-                } : isPast ? {
-                  backgroundColor: `${activeColor}20`,
-                  color: activeColor,
-                } : {}}
-              >
-                {isPast ? (
-                  <IconCheck />
-                ) : (
-                  s.number
-                )}
-              </span>
-
-              <div className="flex flex-col min-w-0">
-                <span
-                  className={`text-[11px] font-semibold transition-colors duration-300 ${
-                    !isActive ? "text-text-tertiary" : ""
-                  }`}
-                  style={isCurrent ? { color: activeColor } : isPast ? { color: 'var(--text-secondary)' } : {}}
-                >
-                  {s.label}
-                </span>
-                {isPast && s.key === "platform" && selectedPlatform && (
-                  <span
-                    className="text-[9px] font-medium truncate max-w-[80px]"
-                    style={{ color: activeColor }}
-                  >
-                    {selectedPlatform.name}
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {i < STEPS.length - 1 && (
-              <div
-                className="w-4 h-px rounded-full shrink-0 transition-colors duration-300"
-                style={{
-                  backgroundColor: currentNum > s.number
-                    ? `${activeColor}50`
-                    : 'var(--border-subtle)',
-                }}
-              />
+          <li
+            key={s.key}
+            className="relative pt-3 pr-3 min-w-0"
+            aria-current={i === currentIndex ? "step" : undefined}
+          >
+            <span
+              className="absolute left-0 right-0 -top-px h-px transition-colors duration-300"
+              style={{ background: reached ? "var(--p-text)" : "transparent" }}
+            />
+            <p className="mx-num">{String(i + 1).padStart(2, "0")}</p>
+            <p className="mx-label mt-1" style={{ color: reached ? "var(--p-text)" : undefined }}>
+              {s.label}
+            </p>
+            {s.value && (
+              <p className="text-xs mt-1 break-words" style={{ color: "var(--p-muted)" }}>
+                {s.value}
+              </p>
             )}
-          </div>
+          </li>
         );
       })}
-    </div>
+    </ol>
   );
 }

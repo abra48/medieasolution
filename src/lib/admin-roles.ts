@@ -73,6 +73,7 @@ export type NavPermission = {
   articles: boolean;
   modules: boolean;
   support: boolean;
+  gallery: boolean;
 };
 
 export function getNavPermissions(role: string | null | undefined): NavPermission {
@@ -90,5 +91,6 @@ export function getNavPermissions(role: string | null | undefined): NavPermissio
     articles: true, // all tiers can manage articles
     modules: isSenior,
     support: true, // all tiers
+    gallery: true, // all tiers can view; upload/hapus Senior+
   };
 }

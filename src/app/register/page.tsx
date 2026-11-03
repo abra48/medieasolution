@@ -25,6 +25,7 @@ function RegisterPageInner() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="https://i.ibb.co.com/qY3R33DK/Gemini-Generated-Image-xmtysbxmtysbxmty.png" alt="Mediea Solution" className="w-8 h-8 rounded-lg object-cover" />
             <span className="text-base font-semibold text-text-primary">
               Mediea<span className="text-accent">Solution</span>

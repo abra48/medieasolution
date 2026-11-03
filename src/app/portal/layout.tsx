@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { logout } from "@/app/actions/auth";
-import Link from "next/link";
 import { DynamicPopUp } from "@/components/dynamic-popup";
 import { isAdminRole } from "@/lib/admin-roles";
 import { PortalShell } from "@/components/portal-shell";

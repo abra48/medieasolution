@@ -1,166 +1,103 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { AssetForm, ASSET_TYPES, type Asset } from "./asset-form";
 
-type Asset = {
-  id: string;
-  asset_type: string;
-  title: string | null;
-  description: string | null;
-  content: string;
-  image_url: string | null;
-  link_url: string | null;
-  is_active: boolean;
-  created_at: string;
-};
-
-const TYPE_LABELS: Record<string, string> = {
-  article: "Artikel",
-  service: "Layanan",
-  banner: "Banner",
-  pop_up: "Pop-Up",
-  testimonial: "Testimonial",
-};
+const TYPE_LABELS: Record<string, string> = Object.fromEntries(ASSET_TYPES.map((t) => [t.value, t.label]));
 
 export function AssetTable({ assets: initialAssets }: { assets: Asset[] }) {
   const [assets, setAssets] = useState(initialAssets);
-  const [togglingId, setTogglingId] = useState<string | null>(null);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [editing, setEditing] = useState<Asset | null>(null);
+  const [formKey, setFormKey] = useState(0);
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const toggleActive = useCallback(async (id: string, currentState: boolean) => {
-    setTogglingId(id);
-    const supabase = createClient();
-    const { error } = await supabase
-      .from("assets")
-      .update({ is_active: !currentState })
-      .eq("id", id);
+  async function toggleActive(asset: Asset) {
+    setBusyId(asset.id);
+    const { error: updateError } = await createClient().from("assets").update({ is_active: !asset.is_active }).eq("id", asset.id);
+    if (updateError) setError(updateError.message);
+    else setAssets((prev) => prev.map((a) => (a.id === asset.id ? { ...a, is_active: !a.is_active } : a)));
+    setBusyId(null);
+  }
 
-    if (!error) {
-      setAssets((prev) =>
-        prev.map((a) => (a.id === id ? { ...a, is_active: !currentState } : a))
-      );
+  async function deleteAsset(asset: Asset) {
+    if (!window.confirm(`Hapus aset "${asset.title || TYPE_LABELS[asset.asset_type] || asset.asset_type}" secara permanen?`)) return;
+    setBusyId(asset.id);
+    const { error: deleteError } = await createClient().from("assets").delete().eq("id", asset.id);
+    if (deleteError) setError(deleteError.message);
+    else {
+      setAssets((prev) => prev.filter((a) => a.id !== asset.id));
+      if (editing?.id === asset.id) setEditing(null);
     }
-    setTogglingId(null);
-  }, []);
+    setBusyId(null);
+  }
 
-  const deleteAsset = useCallback(async (id: string) => {
-    setDeletingId(id);
-    const supabase = createClient();
-    const { error } = await supabase.from("assets").delete().eq("id", id);
-    if (!error) {
-      setAssets((prev) => prev.filter((a) => a.id !== id));
-    }
-    setDeletingId(null);
-  }, []);
+  function startEdit(asset: Asset) {
+    setEditing(asset);
+    setFormKey((k) => k + 1);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-sm font-semibold text-text-primary">Registrasi Aset</h2>
-        <span className="text-xs text-text-tertiary">{assets.length} aset</span>
-      </div>
-
-      <div
-        className="border border-border-default overflow-hidden"
-        style={{ clipPath: "polygon(0 4px, 4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%)" }}
-      >
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="bg-bg-secondary border-b border-border-default">
-                <th className="text-left text-[10px] font-semibold text-text-tertiary uppercase tracking-wider px-4 py-2.5">Tipe</th>
-                <th className="text-left text-[10px] font-semibold text-text-tertiary uppercase tracking-wider px-4 py-2.5">Judul</th>
-                <th className="text-left text-[10px] font-semibold text-text-tertiary uppercase tracking-wider px-4 py-2.5 hidden sm:table-cell">Konten</th>
-                <th className="text-left text-[10px] font-semibold text-text-tertiary uppercase tracking-wider px-4 py-2.5">Status</th>
-                <th className="text-left text-[10px] font-semibold text-text-tertiary uppercase tracking-wider px-4 py-2.5 hidden md:table-cell">Dibuat</th>
-                <th className="text-left text-[10px] font-semibold text-text-tertiary uppercase tracking-wider px-4 py-2.5">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border-subtle">
-              {assets.length === 0 && (
-                <tr>
-                  <td colSpan={6} className="text-center py-12 text-text-tertiary text-sm">
-                    Belum ada aset. Gunakan form di atas untuk menambahkan konten.
-                  </td>
-                </tr>
-              )}
-              {assets.map((asset) => (
-                <tr key={asset.id} className="bg-bg-primary hover:bg-bg-secondary/40 transition-colors">
-                  {/* Type */}
-                  <td className="px-4 py-2.5">
-                    <span
-                      className="text-[10px] font-semibold uppercase tracking-wider text-accent-gold bg-accent-gold/10 px-1.5 py-0.5"
-                      style={{ clipPath: "polygon(0 2px, 2px 0, 100% 0, 100% calc(100% - 2px), calc(100% - 2px) 100%, 0 100%)" }}
-                    >
-                      {TYPE_LABELS[asset.asset_type] || asset.asset_type}
-                    </span>
-                  </td>
-
-                  {/* Title */}
-                  <td className="px-4 py-2.5 text-sm font-medium text-text-primary max-w-[180px] truncate">
-                    {asset.title || "—"}
-                  </td>
-
-                  {/* Content Preview */}
-                  <td className="px-4 py-2.5 text-xs text-text-tertiary truncate max-w-[200px] hidden sm:table-cell">
-                    {asset.content?.substring(0, 50) || "—"}
-                  </td>
-
-                  {/* Status Toggle */}
-                  <td className="px-4 py-2.5">
-                    <button
-                      onClick={() => toggleActive(asset.id, asset.is_active)}
-                      disabled={togglingId === asset.id}
-                      className="group"
-                    >
-                      <span
-                        className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider transition-all duration-200
-                          ${asset.is_active
-                            ? "bg-accent-green/10 text-accent-green hover:bg-accent-green/20"
-                            : "bg-bg-tertiary text-text-tertiary hover:bg-bg-elevated"
-                          }
-                          ${togglingId === asset.id ? "opacity-50" : ""}
-                        `}
-                        style={{ clipPath: "polygon(0 2px, 2px 0, 100% 0, 100% calc(100% - 2px), calc(100% - 2px) 100%, 0 100%)" }}
-                      >
-                        <span
-                          className={`w-1.5 h-1.5 transition-colors ${asset.is_active ? "bg-accent-green" : "bg-text-tertiary"}`}
-                          style={{ clipPath: "polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)" }}
-                        />
-                        {asset.is_active ? "Aktif" : "Nonaktif"}
-                      </span>
-                    </button>
-                  </td>
-
-                  {/* Created */}
-                  <td className="px-4 py-2.5 text-xs text-text-tertiary hidden md:table-cell">
-                    {new Date(asset.created_at).toLocaleDateString("id-ID", {
-                      day: "2-digit", month: "short", year: "numeric",
-                    })}
-                  </td>
-
-                  {/* Actions */}
-                  <td className="px-4 py-2.5">
-                    <button
-                      onClick={() => {
-                        if (confirm("Hapus aset ini secara permanen?")) {
-                          deleteAsset(asset.id);
-                        }
-                      }}
-                      disabled={deletingId === asset.id}
-                      className={`text-[10px] font-semibold uppercase tracking-wider text-text-tertiary hover:text-danger transition-colors
-                        ${deletingId === asset.id ? "opacity-50" : ""}`}
-                    >
-                      {deletingId === asset.id ? "..." : "Hapus"}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+    <div className="space-y-10">
+      <section>
+        <div className="mx-section-head">
+          <h2 className="mx-subtitle">{editing ? <>Edit &ldquo;{editing.title || TYPE_LABELS[editing.asset_type]}&rdquo;</> : "Tambah aset"}</h2>
         </div>
-      </div>
+        <AssetForm
+          key={formKey}
+          asset={editing}
+          onSaved={(saved, isNew) => {
+            setAssets((prev) => (isNew ? [saved, ...prev] : prev.map((a) => (a.id === saved.id ? saved : a))));
+            if (!isNew) {
+              setEditing(null);
+              setFormKey((k) => k + 1);
+            }
+          }}
+          onCancel={() => {
+            setEditing(null);
+            setFormKey((k) => k + 1);
+          }}
+        />
+      </section>
+
+      <section>
+        <div className="mx-section-head">
+          <h2 className="mx-subtitle">Aset terdaftar</h2>
+          <span className="mx-num">{assets.length} aset</span>
+        </div>
+
+        {error && <p className="mx-notice mx-notice-error mb-4">{error}</p>}
+
+        {assets.length === 0 ? (
+          <p className="mx-empty">Belum ada aset.</p>
+        ) : (
+          <div className="mx-list">
+            {assets.map((asset) => (
+              <div key={asset.id} className="mx-row" style={busyId === asset.id ? { opacity: 0.5 } : undefined}>
+                <span className="mx-label w-24 shrink-0">{TYPE_LABELS[asset.asset_type] || asset.asset_type}</span>
+                <div className="min-w-0 flex-1">
+                  <p className="mx-row-title">
+                    {asset.title || "Tanpa judul"}
+                    {!asset.is_active && <span className="mx-num ml-2">· nonaktif</span>}
+                  </p>
+                  <p className="mx-row-desc line-clamp-2">{asset.description || asset.content}</p>
+                </div>
+                <div className="flex gap-4 shrink-0 self-center">
+                  <button type="button" className="mx-link" disabled={busyId === asset.id} onClick={() => toggleActive(asset)}>
+                    {asset.is_active ? "Nonaktifkan" : "Aktifkan"}
+                  </button>
+                  <button type="button" className="mx-link" onClick={() => startEdit(asset)}>Edit</button>
+                  <button type="button" className="mx-link mx-link-danger" disabled={busyId === asset.id} onClick={() => deleteAsset(asset)}>
+                    Hapus
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }

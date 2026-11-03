@@ -1,81 +1,81 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { getContactSettings } from "@/app/actions/contact";
-import { IconExternalLink } from "@/components/icons";
+import { useI18n } from "@/lib/i18n";
 
-export function ContactHub() {
-  const [contacts, setContacts] = useState([
-    {
-      label: "WhatsApp",
-      description: "Chat langsung dengan tim pemulihan kami.",
-      url: "https://wa.me/6281241511156",
-      color: "#25D366",
-    },
-    {
-      label: "Telegram",
-      description: "Hubungi kami via Telegram untuk bantuan.",
-      url: "https://t.me/medieasolution",
-      color: "#26A5E4",
-    },
+type ContactSettings = {
+  phone: string;
+  website: string;
+  whatsapp_url: string;
+  telegram_url: string;
+};
+
+export type FaqItem = { id: string; q: string; a: string };
+
+function ArrowUpRight() {
+  return (
+    <svg className="w-3 h-3 shrink-0" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.25} aria-hidden>
+      <path d="M4.5 11.5l7-7M6 4.5h5.5V10" strokeLinecap="square" />
+    </svg>
+  );
+}
+
+export function ContactHub({ settings }: { settings: ContactSettings }) {
+  const { t } = useI18n();
+
+  const contacts = [
+    { label: "WhatsApp", detail: settings.phone, desc: t("support.wa.desc"), url: settings.whatsapp_url },
+    { label: "Telegram", detail: settings.telegram_url.replace(/^https?:\/\//, ""), desc: t("support.tg.desc"), url: settings.telegram_url },
     {
       label: "Website",
-      description: "Kunjungi website resmi kami.",
-      url: "https://mediea.co.id",
-      color: "#10b981",
+      detail: settings.website.replace(/^https?:\/\//, ""),
+      desc: t("support.web.desc"),
+      url: settings.website.startsWith("http") ? settings.website : `https://${settings.website}`,
     },
-  ]);
-
-  useEffect(() => {
-    getContactSettings().then((settings) => {
-      setContacts([
-        {
-          label: "WhatsApp",
-          description: `Chat langsung — ${settings.phone}`,
-          url: settings.whatsapp_url,
-          color: "#25D366",
-        },
-        {
-          label: "Telegram",
-          description: "Hubungi kami via Telegram untuk bantuan.",
-          url: settings.telegram_url,
-          color: "#26A5E4",
-        },
-        {
-          label: "Website",
-          description: settings.website,
-          url: settings.website.startsWith("http") ? settings.website : `https://${settings.website}`,
-          color: "#10b981",
-        },
-      ]);
-    });
-  }, []);
+  ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-      {contacts.map((contact) => (
-        <a
-          key={contact.label}
-          href={contact.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="card flex items-center gap-4 group"
-        >
-          <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-            style={{ backgroundColor: `${contact.color}15`, border: `1px solid ${contact.color}30` }}
-          >
-            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: contact.color }} />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-text-primary group-hover:text-accent transition-colors">
-              {contact.label}
-            </p>
-            <p className="text-xs text-text-tertiary">{contact.description}</p>
-          </div>
-          <IconExternalLink className="w-4 h-4 text-text-tertiary shrink-0" />
-        </a>
-      ))}
-    </div>
+    <section>
+      <p className="mx-label mb-4">{t("support.contact")}</p>
+      <div className="mx-list">
+        {contacts.map((c, i) => (
+          <a key={c.label} href={c.url} target="_blank" rel="noopener noreferrer" className="mx-row">
+            <span className="mx-num w-6 shrink-0">{String(i + 1).padStart(2, "0")}</span>
+            <span className="min-w-0 flex-1">
+              <span className="mx-row-title block">{c.label}</span>
+              <span className="mx-row-desc block">{c.desc}</span>
+            </span>
+            <span className="hidden sm:block text-xs font-mono truncate max-w-[220px]" style={{ color: "var(--p-muted)" }}>
+              {c.detail}
+            </span>
+            <span className="mx-row-arrow"><ArrowUpRight /></span>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export function SupportFaq({ items }: { items: FaqItem[] }) {
+  const { t } = useI18n();
+  const faq: FaqItem[] = items.length
+    ? items
+    : [1, 2, 3, 4].map((n) => ({ id: `faq-${n}`, q: t(`support.faq${n}.q`), a: t(`support.faq${n}.a`) }));
+
+  return (
+    <section>
+      <p className="mx-label mb-4">{t("support.faq")}</p>
+      <div className="mx-list">
+        {faq.map((item, i) => (
+          <details key={item.id} className="group" style={{ borderBottom: "1px solid var(--p-border)" }}>
+            <summary className="flex items-baseline gap-5 py-5 px-1 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+              <span className="mx-num w-6 shrink-0">{String(i + 1).padStart(2, "0")}</span>
+              <span className="mx-row-title flex-1">{item.q}</span>
+              <span className="mx-num transition-transform duration-200 group-open:rotate-45 text-base leading-none" aria-hidden>+</span>
+            </summary>
+            <p className="mx-row-desc pb-5 pl-[52px] pr-8 whitespace-pre-line">{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
   );
 }

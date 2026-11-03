@@ -24,12 +24,10 @@ export function ContactSettings() {
   }, []);
 
   // Auto-derive WhatsApp URL from phone
-  useEffect(() => {
-    if (phone) {
-      const cleaned = phone.replace(/^0/, "");
-      setWhatsappUrl(`https://wa.me/62${cleaned}`);
-    }
-  }, [phone]);
+  function changePhone(value: string) {
+    setPhone(value);
+    if (value) setWhatsappUrl(`https://wa.me/62${value.replace(/^0/, "")}`);
+  }
 
   return (
     <div className="card !p-5 space-y-4">
@@ -77,7 +75,7 @@ export function ContactSettings() {
               type="text"
               name="phone"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => changePhone(e.target.value)}
               placeholder="081241511156"
               className="input text-sm"
               required

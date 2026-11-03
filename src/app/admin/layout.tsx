@@ -36,6 +36,7 @@ export default async function AdminLayout({
     { key: "codes" as const, label: "Access Codes", href: "/admin/codes" },
     { key: "affiliates" as const, label: "Affiliates", href: "/admin/affiliates" },
     { key: "assets" as const, label: "Assets", href: "/admin/assets" },
+    { key: "gallery" as const, label: "Gallery", href: "/admin/gallery" },
     { key: "articles" as const, label: "Articles", href: "/admin/articles" },
     { key: "modules" as const, label: "Modules", href: "/admin/modules" },
     { key: "support" as const, label: "Support", href: "/admin/support" },

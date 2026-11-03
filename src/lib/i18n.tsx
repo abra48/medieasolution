@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useCallback, useMemo, useSyncExternalStore, type ReactNode } from "react";
 
 /* ——— Types ——— */
 export type Locale = "id" | "en";
@@ -221,12 +221,26 @@ const dict: Record<Locale, Translations> = {
     "troubleshoot.copied": "Tersalin",
     "troubleshoot.copy": "Salin",
     "troubleshoot.noIssue": "Belum ada masalah tersedia",
+    "troubleshoot.solutionShort": "Solusi",
+    "troubleshoot.errorLoadingIssues": "Gagal memuat daftar kendala",
     "troubleshoot.tryOtherKeyword": "Coba kata kunci lain.",
 
     /* ——— Support ——— */
     "support.title": "Support",
     "support.subtitle": "Hubungi tim kami untuk bantuan pemulihan akun.",
-    "support.faq": "FAQ",
+    "support.faq": "Pertanyaan umum",
+    "support.contact": "Hubungi kami",
+    "support.wa.desc": "Chat langsung dengan tim pemulihan",
+    "support.tg.desc": "Bantuan cepat lewat Telegram",
+    "support.web.desc": "Website resmi Mediea Solution",
+    "support.faq1.q": "Berapa lama proses pemulihan?",
+    "support.faq1.a": "Tergantung platform dan jenis kendala. Umumnya 1–7 hari kerja.",
+    "support.faq2.q": "Apakah data saya aman?",
+    "support.faq2.a": "Kami tidak pernah meminta password Anda. Semua panduan bersifat mandiri.",
+    "support.faq3.q": "Bagaimana cara mendapatkan kode akses?",
+    "support.faq3.a": "Melalui admin resmi kami via WhatsApp atau mitra affiliate.",
+    "support.faq4.q": "Apakah ada jaminan berhasil?",
+    "support.faq4.a": "Panduan mengikuti prosedur resmi tiap platform. Hasil akhir bergantung pada kondisi akun.",
 
     /* ——— Articles ——— */
     "articles.title": "Pusat Informasi",
@@ -451,12 +465,26 @@ const dict: Record<Locale, Translations> = {
     "troubleshoot.copied": "Copied",
     "troubleshoot.copy": "Copy",
     "troubleshoot.noIssue": "No issues available yet",
+    "troubleshoot.solutionShort": "Solution",
+    "troubleshoot.errorLoadingIssues": "Failed to load issues",
     "troubleshoot.tryOtherKeyword": "Try another keyword.",
 
     /* ——— Support ——— */
     "support.title": "Support",
     "support.subtitle": "Contact our team for account recovery assistance.",
-    "support.faq": "FAQ",
+    "support.faq": "Frequently asked",
+    "support.contact": "Contact us",
+    "support.wa.desc": "Chat directly with our recovery team",
+    "support.tg.desc": "Quick help via Telegram",
+    "support.web.desc": "Official Mediea Solution website",
+    "support.faq1.q": "How long does recovery take?",
+    "support.faq1.a": "It depends on the platform and issue. Usually 1–7 business days.",
+    "support.faq2.q": "Is my data safe?",
+    "support.faq2.a": "We never ask for your password. All guides are self-service.",
+    "support.faq3.q": "How do I get an access code?",
+    "support.faq3.a": "Through our official admin on WhatsApp or an affiliate partner.",
+    "support.faq4.q": "Is success guaranteed?",
+    "support.faq4.a": "Guides follow each platform's official procedures. Results depend on the account's condition.",
 
     /* ——— Articles ——— */
     "articles.title": "Information Center",
@@ -484,45 +512,48 @@ const I18nContext = createContext<I18nContextValue>({
   t: (key) => key,
 });
 
+/* ——— Locale store (localStorage, shared by every provider instance) ——— */
+const LANG_KEY = "mediea-lang";
+const LANG_EVENT = "mediea-lang-change";
+
+function readLocale(): Locale {
+  try {
+    const saved = localStorage.getItem(LANG_KEY);
+    return saved === "en" ? "en" : "id";
+  } catch {
+    return "id";
+  }
+}
+
+function subscribeLocale(onChange: () => void) {
+  window.addEventListener(LANG_EVENT, onChange);
+  window.addEventListener("storage", onChange);
+  return () => {
+    window.removeEventListener(LANG_EVENT, onChange);
+    window.removeEventListener("storage", onChange);
+  };
+}
+
 /* ——— Provider ——— */
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>("id");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const saved = localStorage.getItem("mediea-lang") as Locale | null;
-    if (saved && (saved === "id" || saved === "en")) {
-      setLocaleState(saved);
-    }
-  }, []);
+  // Server render & hydration use "id"; the saved choice applies right after
+  const locale = useSyncExternalStore(subscribeLocale, readLocale, () => "id" as Locale);
 
   const setLocale = useCallback((newLocale: Locale) => {
-    setLocaleState(newLocale);
-    localStorage.setItem("mediea-lang", newLocale);
+    try {
+      localStorage.setItem(LANG_KEY, newLocale);
+    } catch {}
+    window.dispatchEvent(new Event(LANG_EVENT));
   }, []);
 
   const t = useCallback(
-    (key: string): string => {
-      return dict[locale]?.[key] ?? dict["id"]?.[key] ?? key;
-    },
+    (key: string): string => dict[locale]?.[key] ?? dict["id"]?.[key] ?? key,
     [locale]
   );
 
-  // During SSR / before mount, still provide defaults
-  if (!mounted) {
-    return (
-      <I18nContext.Provider value={{ locale: "id", setLocale, t: (key) => dict["id"]?.[key] ?? key }}>
-        {children}
-      </I18nContext.Provider>
-    );
-  }
+  const value = useMemo(() => ({ locale, setLocale, t }), [locale, setLocale, t]);
 
-  return (
-    <I18nContext.Provider value={{ locale, setLocale, t }}>
-      {children}
-    </I18nContext.Provider>
-  );
+  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
 }
 
 /* ——— Hook ——— */

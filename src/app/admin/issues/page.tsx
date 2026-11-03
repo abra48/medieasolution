@@ -13,10 +13,9 @@ export default async function IssuesPage() {
   return (
     <div className="space-y-8 animate-fade-in">
       <div>
-        <h1 className="text-2xl font-bold text-text-primary mb-1">
-          Manajemen <span className="text-gradient-gold">Kendala</span>
-        </h1>
-        <p className="text-sm text-text-secondary">Pilih platform, lalu kelola kendala terdaftar.</p>
+        <p className="mx-label mb-2">Konten panduan</p>
+        <h1 className="mx-title text-3xl mb-1">Kendala</h1>
+        <p className="text-sm" style={{ color: "var(--p-muted)" }}>Pilih platform, lalu kelola kendala terdaftar.</p>
       </div>
 
       <IssuesManager platforms={platforms || []} />
